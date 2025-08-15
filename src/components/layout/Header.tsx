@@ -65,9 +65,11 @@ const Header = () => {
             to="/"
             className="flex items-center space-x-3 font-poppins font-bold text-xl text-primary hover:text-primary-light transition-colors"
           >
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center text-white font-bold">
-              D
-            </div>
+            <img
+              src="/favicon.png"
+              alt="Logo"
+              className="w-8 h-8 rounded-lg object-cover"
+            />
             <span className="hidden sm:block">Nguyễn Gia Đạt</span>
           </Link>
 
@@ -139,7 +141,9 @@ const Header = () => {
               className="hidden sm:flex items-center space-x-1"
             >
               <Globe className="w-4 h-4" />
-              <span className="text-xs font-medium">{language.toUpperCase()}</span>
+              <span className="text-xs font-medium">
+                {language.toUpperCase()}
+              </span>
             </Button>
 
             {/* Notifications */}
