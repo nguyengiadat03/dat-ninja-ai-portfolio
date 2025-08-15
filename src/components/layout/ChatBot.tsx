@@ -48,6 +48,9 @@ const ChatBot = () => {
     scrollToBottom();
   }, [messages]);
 
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionKey] = useState(() => 'session_' + Math.random().toString(36).substr(2, 9));
+
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
 
@@ -62,17 +65,55 @@ const ChatBot = () => {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse: Message = {
+    try {
+      const response = await fetch('https://yoxkoxpwgiwskdnjjhyd.supabase.co/functions/v1/chatbot-ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: content,
+          sessionId,
+          sessionKey,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: data.message,
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+        
+        // Save session ID for future messages
+        if (data.sessionId && !sessionId) {
+          setSessionId(data.sessionId);
+        }
+      } else {
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          content: "Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau.",
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: getAIResponse(content),
+        content: "Xin lỗi, có lỗi kết nối. Vui lòng thử lại sau.",
         isUser: false,
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, aiResponse]);
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const getAIResponse = (userMessage: string): string => {

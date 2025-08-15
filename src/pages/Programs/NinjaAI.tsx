@@ -40,19 +40,57 @@ const NinjaAI = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Đơn ứng tuyển đã được gửi!",
-      description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
-    });
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      cvLink: "",
-      motivation: ""
-    });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://yoxkoxpwgiwskdnjjhyd.supabase.co/functions/v1/submit-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phone,
+          cvUrl: formData.cvLink,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Đơn ứng tuyển đã được gửi!",
+          description: data.message || "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+        });
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          cvLink: "",
+          motivation: ""
+        });
+      } else {
+        toast({
+          title: "Có lỗi xảy ra",
+          description: data.error || "Vui lòng thử lại sau.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      toast({
+        title: "Có lỗi xảy ra",
+        description: "Vui lòng kiểm tra kết nối internet và thử lại.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const roadmapItems = [
@@ -402,9 +440,10 @@ const NinjaAI = () => {
                 <Button 
                   type="submit"
                   size="lg"
+                  disabled={isSubmitting}
                   className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green px-12 py-4 text-lg"
                 >
-                  Gửi CV & Đơn ứng tuyển
+                  {isSubmitting ? 'Đang gửi...' : 'Gửi CV & Đơn ứng tuyển'}
                   <Send className="w-5 h-5 ml-2" />
                 </Button>
               </div>
