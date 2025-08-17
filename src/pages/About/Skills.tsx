@@ -1,16 +1,40 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Code2, 
-  Database, 
-  Brain, 
-  Palette, 
+import {
+  Code2,
+  Database,
+  Brain,
   Server,
-  Smartphone,
+  GitBranch,
+  Palette,
   Globe,
-  GitBranch
 } from "lucide-react";
-import frontendSkills from "@/assets/frontend-skills.jpg";
+import {
+  FaReact,
+  FaVuejs,
+  FaNodeJs,
+  FaPython,
+  FaDocker,
+  FaGitAlt,
+  FaGithub,
+  FaFigma,
+} from "react-icons/fa";
+import {
+  SiTypescript,
+  SiMongodb,
+  SiMysql,
+  SiPostgresql,
+  SiRedis,
+  SiFirebase,
+  SiVercel,
+  SiJest,
+  SiCypress,
+  SiVite,
+  SiWebpack,
+  SiPostman,
+  SiTensorflow,
+} from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
 
 const Skills = () => {
   const skillCategories = [
@@ -19,94 +43,197 @@ const Skills = () => {
       icon: <Code2 className="w-6 h-6" />,
       color: "bg-gradient-primary",
       skills: [
-        { name: "React.js", level: 95 },
-        { name: "TypeScript", level: 90 },
-        { name: "JavaScript (ES6+)", level: 95 },
-        { name: "HTML5/CSS3", level: 98 },
-        { name: "Tailwind CSS", level: 92 },
-        { name: "Next.js", level: 85 },
-        { name: "Vue.js", level: 75 },
-        { name: "SASS/SCSS", level: 88 }
-      ]
+        {
+          name: "React.js",
+          level: 80,
+          icon: <FaReact className="text-sky-400" />,
+        },
+        {
+          name: "TypeScript",
+          level: 70,
+          icon: <SiTypescript className="text-blue-500" />,
+        },
+        {
+          name: "JavaScript (ES6+)",
+          level: 70,
+          icon: <Code2 className="text-yellow-400" />,
+        },
+        {
+          name: "HTML5/CSS3",
+          level: 85,
+          icon: <Palette className="text-orange-500" />,
+        },
+        {
+          name: "Tailwind CSS",
+          level: 75,
+          icon: <Palette className="text-cyan-400" />,
+        },
+        { name: "Next.js", level: 50, icon: <Globe className="text-black" /> },
+        {
+          name: "Vue.js",
+          level: 60,
+          icon: <FaVuejs className="text-green-500" />,
+        },
+        {
+          name: "SASS/SCSS",
+          level: 40,
+          icon: <Palette className="text-pink-500" />,
+        },
+      ],
     },
     {
       title: "Backend Development",
       icon: <Server className="w-6 h-6" />,
       color: "bg-gradient-accent",
       skills: [
-        { name: "Node.js", level: 80 },
-        { name: "Express.js", level: 78 },
-        { name: "Python", level: 70 },
-        { name: "RESTful APIs", level: 85 },
-        { name: "GraphQL", level: 65 },
-        { name: "Microservices", level: 60 }
-      ]
+        {
+          name: "Node.js",
+          level: 40,
+          icon: <FaNodeJs className="text-green-600" />,
+        },
+        {
+          name: "Express.js",
+          level: 30,
+          icon: <Server className="text-gray-600" />,
+        },
+        {
+          name: "Python",
+          level: 50,
+          icon: <FaPython className="text-yellow-400" />,
+        },
+        {
+          name: "RESTful APIs",
+          level: 50,
+          icon: <Globe className="text-blue-500" />,
+        },
+        {
+          name: "GraphQL",
+          level: 30,
+          icon: <Code2 className="text-pink-500" />,
+        },
+        {
+          name: "Microservices",
+          level: 30,
+          icon: <Server className="text-purple-500" />,
+        },
+      ],
     },
     {
       title: "Database & Tools",
       icon: <Database className="w-6 h-6" />,
-      color: "bg-gradient-secondary",
+      color: "bg-red-800",
       skills: [
-        { name: "MongoDB", level: 82 },
-        { name: "PostgreSQL", level: 75 },
-        { name: "MySQL", level: 80 },
-        { name: "Redis", level: 65 },
-        { name: "Supabase", level: 88 },
-        { name: "Firebase", level: 85 }
-      ]
+        {
+          name: "MongoDB",
+          level: 40,
+          icon: <SiMongodb className="text-green-500" />,
+        },
+        {
+          name: "PostgreSQL",
+          level: 40,
+          icon: <SiPostgresql className="text-blue-500" />,
+        },
+        {
+          name: "MySQL",
+          level: 70,
+          icon: <SiMysql className="text-orange-400" />,
+        },
+        {
+          name: "Redis",
+          level: 20,
+          icon: <SiRedis className="text-red-500" />,
+        },
+        {
+          name: "Supabase",
+          level: 70,
+          icon: <Database className="text-green-400" />,
+        },
+        {
+          name: "Firebase",
+          level: 60,
+          icon: <SiFirebase className="text-yellow-500" />,
+        },
+      ],
     },
     {
       title: "AI & Machine Learning",
       icon: <Brain className="w-6 h-6" />,
       color: "bg-gradient-primary",
       skills: [
-        { name: "TensorFlow.js", level: 70 },
-        { name: "OpenAI API", level: 85 },
-        { name: "Chatbot Development", level: 90 },
-        { name: "Natural Language Processing", level: 75 },
-        { name: "Computer Vision", level: 60 },
-        { name: "Prompt Engineering", level: 88 }
-      ]
-    }
+        {
+          name: "TensorFlow.js",
+          level: 40,
+          icon: <SiTensorflow className="text-orange-500" />,
+        },
+        {
+          name: "OpenAI API",
+          level: 70,
+          icon: <Brain className="text-purple-500" />,
+        },
+        {
+          name: "Chatbot Development",
+          level: 75,
+          icon: <Brain className="text-blue-400" />,
+        },
+        {
+          name: "Natural Language Processing",
+          level: 40,
+          icon: <Brain className="text-green-500" />,
+        },
+        {
+          name: "Computer Vision",
+          level: 50,
+          icon: <Brain className="text-pink-400" />,
+        },
+        {
+          name: "Prompt Engineering",
+          level: 60,
+          icon: <Brain className="text-yellow-500" />,
+        },
+      ],
+    },
   ];
 
   const tools = [
-    "VS Code", "Git", "GitHub", "Docker", "Figma", "Adobe XD", 
-    "Postman", "Jest", "Cypress", "Webpack", "Vite", "Vercel"
+    { name: "VS Code", icon: <VscVscode className="text-blue-500" /> },
+    { name: "Git", icon: <FaGitAlt className="text-orange-500" /> },
+    { name: "GitHub", icon: <FaGithub className="text-black" /> },
+    { name: "Docker", icon: <FaDocker className="text-sky-400" /> },
+    { name: "Figma", icon: <FaFigma className="text-pink-500" /> },
+    { name: "Adobe XD", icon: <Palette className="text-red-500" /> },
+    { name: "Postman", icon: <SiPostman className="text-orange-500" /> },
+    { name: "Jest", icon: <SiJest className="text-red-600" /> },
+    { name: "Cypress", icon: <SiCypress className="text-green-600" /> },
+    { name: "Webpack", icon: <SiWebpack className="text-blue-500" /> },
+    { name: "Vite", icon: <SiVite className="text-purple-500" /> },
+    { name: "Vercel", icon: <SiVercel className="text-black" /> },
   ];
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-green-200 py-20">
+      <div className="container bg-gradient-to-b mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-pulse">
             Kỹ năng chuyên môn
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Tổng hợp những kỹ năng và công nghệ tôi đã thành thạo qua quá trình học tập và làm việc. 
-            Luôn học hỏi và cập nhật những xu hướng công nghệ mới nhất.
+            Tổng hợp những kỹ năng và công nghệ tôi đã thành thạo qua quá trình
+            học tập và làm việc.
           </p>
-        </div>
-
-        {/* Hero Image */}
-        <div className="mb-16 text-center">
-          <img 
-            src={frontendSkills} 
-            alt="Frontend Development Skills" 
-            className="mx-auto rounded-lg shadow-lg max-w-2xl w-full"
-          />
         </div>
 
         {/* Skills Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {skillCategories.map((category, index) => (
-            <Card 
-              key={index} 
-              className="p-6 card-hover bg-gradient-card border-none"
+            <Card
+              key={index}
+              className="p-6 card-hover bg-gradient-card border-none group"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center text-white`}>
+                <div
+                  className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center text-white`}
+                >
                   {category.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-foreground">
@@ -118,13 +245,17 @@ const Skills = () => {
                 {category.skills.map((skill, skillIndex) => (
                   <div key={skillIndex} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-foreground font-medium">{skill.name}</span>
-                      <span className="text-sm text-muted-foreground">{skill.level}%</span>
+                      <span className="flex items-center gap-2 text-foreground font-medium">
+                        {skill.icon} {skill.name}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {skill.level}%
+                      </span>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${skill.level}%` }}
+                    <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-primary h-2 rounded-full w-0 group-hover:w-[var(--skill-level)] transition-all duration-1000"
+                        style={{ ["--skill-level" as any]: `${skill.level}%` }}
                       />
                     </div>
                   </div>
@@ -141,19 +272,19 @@ const Skills = () => {
             <h3 className="text-2xl font-semibold text-foreground mb-2">
               Công cụ & Công nghệ
             </h3>
-            <p className="text-muted-foreground">
-              Các công cụ và platform tôi sử dụng hàng ngày trong quá trình phát triển
-            </p>
           </div>
 
           <div className="flex flex-wrap gap-3 justify-center">
             {tools.map((tool, index) => (
-              <Badge 
+              <Badge
                 key={index}
                 variant="secondary"
-                className="px-4 py-2 text-sm bg-secondary hover:bg-secondary-dark transition-colors"
+                className="px-4 py-2 text-sm bg-secondary flex items-center gap-2 
+                   transition-all duration-300
+                   hover:scale-150 hover:shadow-5xl hover:bg-green-500 hover:text-white
+                   hover:z-10 relative"
               >
-                {tool}
+                {tool.icon} {tool.name}
               </Badge>
             ))}
           </div>

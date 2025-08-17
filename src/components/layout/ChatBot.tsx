@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import "./ChatBot.css";
 import {
   MessageCircle,
   Send,
@@ -174,14 +175,8 @@ const ChatBot = () => {
                 <div className="bg-muted text-foreground p-3 rounded-lg rounded-bl-none text-sm">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                    <div
-                      className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                      style={{ animationDelay: "0.1s" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                      style={{ animationDelay: "0.2s" }}
-                    ></div>
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce animate-bounce-delay-1"></div>
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce animate-bounce-delay-2"></div>
                   </div>
                 </div>
               </div>

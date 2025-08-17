@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
+  Zap,
   Code,
   Palette,
   TrendingUp,
@@ -16,7 +17,7 @@ import {
   MapPin,
   Heart,
 } from "lucide-react";
-import heroPortrait from "@/assets/ninjaai.png";
+import heroPortrait from "@/assets/áo mu.jpg";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
 
 const Index = () => {
@@ -94,33 +95,54 @@ const Index = () => {
         <div className="relative z-10 container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left animate-fade-in-left">
             <h1 className="mb-6 leading-tight">
-              <span className="block text-center text-3xl md:text-6xl lg:text-7xl font-bold text-white">
+              <span className="block text-center text-xl md:text-4xl lg:text-5xl font-bold text-white">
                 Nguyễn Gia Đạt
               </span>
+
               <br></br>
-              <span className="block text-center text-base md:text-3xl lg:text-4xl font-semibold text-green-300">
-                Lập Trình Viên FrontEnd Ứng dụng AI-First
+              <span className="block text-center text-base md:text-2xl lg:text-3xl font-semibold text-gradient-primary">
+                From Ninja Ai
               </span>
               <br></br>
               <span className="block text-center text-base md:text-lg lg:text-xl font-medium text-white">
-                HTML5, CSS3, TailwindCSS, ReactJS, VueJS
+                “Tương lai của AI không phải là thay thế con người, mà là tăng
+                cường khả năng của con người.”
+              </span>
+              <span className="block mt-8 text-sm md:text-base lg:text-lg font-medium text-gray-400">
+                Lập Trình Viên FrontEnd, BackEnd, Machine Learning và Ứng dụng
+                AI-First với các công nghệ sử dụng: HTML5, CSS3, TailwindCSS,
+                ReactJS, VueJS, NodeJS, ExpressJS, MongoDB, MySQL, Python.
               </span>
             </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
-              Kết hợp nghệ thuật và công nghệ để tạo nên những sản phẩm web mang
-              dấu ấn riêng, tối ưu trải nghiệm người dùng và kiến tạo trải
-              nghiệm số đột phá.
-            </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link to="/chuong-trinh/ninja-ai">
                 <Button
                   size="lg"
-                  className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green px-8 py-4 text-lg"
+                  className="relative bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 
+               text-white font-semibold hover:from-green-600 hover:to-green-700 
+               shadow-lg shadow-green-300/50 
+               hover:shadow-xl hover:shadow-green-400/60 
+               transition-all duration-300 ease-in-out 
+               px-8 py-4 text-lg rounded-2xl overflow-hidden animate-breathe"
+                  onClick={() =>
+                    document
+                      .getElementById("application-form")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                 >
-                  Tìm hiểu chương trình TTS Ninja AI
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <span className="relative z-10 flex items-center">
+                    Tìm hiểu chương trình TTS Ninja AI
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                    <Zap className="w-5 h-5 ml-2 animate-pulse" />
+                  </span>
+
+                  {/* Hiệu ứng ánh sáng quét qua nút */}
+                  <span
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent 
+                     translate-x-[-100%] hover:translate-x-[100%] 
+                     transition-transform duration-700 ease-in-out rounded-2xl"
+                  />
                 </Button>
               </Link>
 

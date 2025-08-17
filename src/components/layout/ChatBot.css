@@ -1,0 +1,8 @@
+/* Animation delay classes for typing indicators */
+.animate-bounce-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.animate-bounce-delay-2 {
+  animation-delay: 0.2s;
+}

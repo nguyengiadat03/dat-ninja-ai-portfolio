@@ -29,10 +29,6 @@ const Header = () => {
     document.documentElement.classList.toggle("dark");
   };
 
-  const toggleLanguage = () => {
-    setLanguage(language === "vi" ? "en" : "vi");
-  };
-
   const navItems = [
     { label: "Trang chủ", href: "/" },
     {
@@ -70,7 +66,7 @@ const Header = () => {
               alt="Logo"
               className="w-8 h-8 rounded-lg object-cover"
             />
-            <span className="hidden sm:block">Nguyễn Gia Đạt</span>
+            <span className="hidden sm:block">Đạt</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -134,27 +130,155 @@ const Header = () => {
             </Button>
 
             {/* Language Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="hidden sm:flex items-center space-x-1"
-            >
-              <Globe className="w-4 h-4" />
-              <span className="text-xs font-medium">
-                {language.toUpperCase()}
-              </span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden sm:flex items-center space-x-1"
+                >
+                  <span className="text-xs font-medium flex items-center gap-1">
+                    {language === "vi" ? (
+                      <>
+                        <img
+                          src="https://flagcdn.com/w20/vn.png"
+                          alt="VN"
+                          className="w-4 h-3 rounded-sm"
+                        />
+                        VI
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src="https://flagcdn.com/w20/us.png"
+                          alt="EN"
+                          className="w-4 h-3 rounded-sm"
+                        />
+                        EN
+                      </>
+                    )}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="end"
+                className="bg-emerald-700 text-white border-none rounded-md shadow-lg z-[9999]"
+              >
+                <DropdownMenuItem
+                  onClick={() => setLanguage("vi")}
+                  className="flex items-center gap-2 cursor-pointer hover:bg-emerald-600"
+                >
+                  <img
+                    src="https://flagcdn.com/w20/vn.png"
+                    alt="VN"
+                    className="w-5 h-4 rounded-sm"
+                  />
+                  Tiếng Việt
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setLanguage("en")}
+                  className="flex items-center gap-2 cursor-pointer hover:bg-emerald-600"
+                >
+                  <img
+                    src="https://flagcdn.com/w20/us.png"
+                    alt="EN"
+                    className="w-5 h-4 rounded-sm"
+                  />
+                  English
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="hidden sm:flex">
-              <Bell className="w-4 h-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden sm:flex relative"
+                >
+                  <Bell className="w-4 h-4" />
+                  {/* Chấm đỏ báo có thông báo mới */}
+                  <span className="absolute top-1 right-1 block w-2 h-2 bg-red-500 rounded-full"></span>
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="end"
+                className="w-72 bg-white dark:bg-neutral-900 shadow-xl rounded-lg p-2 z-[9999]"
+              >
+                <div className="px-2 py-1 border-b border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-semibold text-emerald-600">
+                    Thông báo
+                  </p>
+                </div>
+
+                <DropdownMenuItem className="flex flex-col items-start gap-1 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-800 cursor-pointer">
+                  <p className="text-sm font-medium text-foreground">
+                    🚀 Sự kiện TTS Ninja AI sắp ra mắt
+                  </p>
+                  <span className="text-xs text-muted-foreground">
+                    Đăng ký liền tay, để trở thành đồng đội của chúng tôi!
+                  </span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="flex flex-col items-start gap-1 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-800 cursor-pointer">
+                  <p className="text-sm font-medium text-foreground">
+                    📢 Rocket Global 2025
+                  </p>
+                  <span className="text-xs text-muted-foreground">
+                    Đăng ký trước 30/09 để giữ chỗ.
+                  </span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="flex flex-col items-start gap-1 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-800 cursor-pointer">
+                  <p className="text-sm font-medium text-foreground">
+                    🎉 Ưu đãi đặc biệt hợp tác cùng IELTS Global
+                  </p>
+                  <span className="text-xs text-muted-foreground">
+                    Giảm ngay 30% cho học viên mới.
+                  </span>
+                </DropdownMenuItem>
+
+                <div className="px-2 py-1 border-t border-gray-200 dark:border-gray-700 text-center">
+                  <button className="text-xs text-emerald-600 hover:underline w-full">
+                    Xem tất cả thông báo
+                  </button>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <style>
+              {`
+                  @keyframes breathe {
+                  0%, 100% { transform: scale(1); }
+                  50% { transform: scale(1.05); }
+                    }
+                     .animate-breathe {
+                      animation: breathe 1s ease-in-out infinite;
+                       }
+            `}
+            </style>
 
             {/* Apply Now Button */}
-            <Link to="/chuong-trinh/ninja-ai">
-              <Button className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green">
-                Apply Now
+            <Link to="/chuong-trinh/ninja-ai" className="relative z-[9999]">
+              <Button
+                className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 
+               text-white font-semibold shadow-lg shadow-emerald-500/40 
+               hover:scale-105 hover:shadow-emerald-600/50 
+               transition-all duration-300 ease-in-out px-6 py-2 rounded-full animate-breathe"
+              >
+                <span className="relative z-10 flex items-center gap-1">
+                  🚀 Apply Now
+                </span>
+
+                {/* Hiệu ứng ánh sáng quét ngang (nhẹ nhàng) */}
+                <span
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent 
+                     translate-x-[-100%] hover:translate-x-[100%] 
+                     transition-transform duration-1000 ease-in-out"
+                ></span>
               </Button>
             </Link>
 
