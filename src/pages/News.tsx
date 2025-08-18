@@ -14,7 +14,7 @@ const News = () => {
       category: "AI Technology",
       readTime: "5 phút đọc",
       views: 1250,
-      image: "/src/assets/tintuc1.jpg",
+      image: "https://yoxkoxpwgiwskdnjjhyd.supabase.co/storage/v1/object/sign/sukien/sukien.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jYzBlZDFkZS00MzRjLTQ3NWMtOWQ1ZC02ZmYxNTY2ZDNiOTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdWtpZW4vc3VraWVuLmpwZyIsImlhdCI6MTc1NTUwNjI3NiwiZXhwIjoxNzg3MDQyMjc2fQ.Y_jTAEpwr31JcRqj8aBJxPVO02kziZnr3TRD-GOELEU",
       featured: true,
     },
     {
