@@ -76,13 +76,12 @@ const Header = () => {
                 {item.isDropdown ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="flex items-center space-x-1 text-foreground hover:text-primary transition-colors"
+                      <button
+                        className="flex items-center space-x-1 text-foreground hover:text-primary transition-colors font-medium bg-transparent border-none cursor-pointer"
                       >
                         <span>{item.label}</span>
                         <ChevronDown className="w-4 h-4" />
-                      </Button>
+                      </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-card/95 backdrop-blur-md border border-border/50">
                       {item.items?.map((subItem, subIndex) => (
