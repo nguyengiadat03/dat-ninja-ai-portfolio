@@ -2,8 +2,10 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Events = () => {
+  const navigate = useNavigate();
   const events = [
     {
       title: "Lê Tân AI: Xây dựng hệ thống Chatbot AI từ A-Z",
@@ -114,7 +116,12 @@ const Events = () => {
                   </div>
 
                   {event.status === "upcoming" && (
-                    <Button className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale">
+                    <Button 
+                      className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale"
+                      onClick={() => {
+                        navigate('/chuong-trinh/ninja-ai', { state: { scrollToForm: true } });
+                      }}
+                    >
                       Đăng ký tham gia
                     </Button>
                   )}
@@ -134,7 +141,12 @@ const Events = () => {
               Tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm tại các sự kiện
               công nghệ
             </p>
-            <Button className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale shadow-green">
+            <Button 
+              className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale shadow-green"
+              onClick={() => {
+                navigate('/chuong-trinh/ninja-ai', { state: { scrollToForm: true } });
+              }}
+            >
               Liên hệ hợp tác
             </Button>
           </Card>

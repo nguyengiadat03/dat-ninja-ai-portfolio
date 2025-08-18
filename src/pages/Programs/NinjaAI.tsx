@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,10 +22,23 @@ import { useToast } from "@/hooks/use-toast";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { useLocation } from "react-router-dom";
 
 const NinjaAI = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollToForm) {
+      setTimeout(() => {
+        const element = document.getElementById('registration-form');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  }, [location.state]);
 
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -460,7 +473,7 @@ const NinjaAI = () => {
           </div>
 
           <Card className="p-8 bg-gray-100 border-none shadow-lg">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form id="registration-form" onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
