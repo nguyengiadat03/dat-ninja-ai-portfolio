@@ -68,7 +68,7 @@ const NinjaAI = () => {
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
         
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('cvs')
+          .from('cv_uploads')
           .upload(fileName, formData.cvFile);
 
         if (uploadError) {
@@ -83,7 +83,7 @@ const NinjaAI = () => {
 
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
-          .from('cvs')
+          .from('cv_uploads')
           .getPublicUrl(uploadData.path);
         
         cvUrl = publicUrl;
