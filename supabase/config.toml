@@ -1,1 +1,7 @@
 project_id = "yoxkoxpwgiwskdnjjhyd"
+
+[functions.submit-application]
+verify_jwt = false
+
+[functions.chatbot-ai]
+verify_jwt = false
