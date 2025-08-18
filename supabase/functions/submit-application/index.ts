@@ -34,6 +34,8 @@ serve(async (req) => {
     }
 
     // Insert into students table
+    console.log('Attempting to insert:', { fullName, email, phoneNumber, cvUrl });
+    
     const { data, error } = await supabase
       .from('students')
       .insert([
@@ -46,6 +48,8 @@ serve(async (req) => {
         }
       ])
       .select();
+    
+    console.log('Insert result:', { data, error });
 
     if (error) {
       console.error('Database error:', error);

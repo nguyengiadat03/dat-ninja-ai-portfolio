@@ -16,59 +16,12 @@ import {
   Brain,
   Code,
   Rocket,
-  XCircle,
+  Upload,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-
-type FormData = {
-  fullName: string;
-  email: string;
-  phone: string;
-  cvFile: File | null;
-  motivation: string;
-};
-
-const BUCKET = "ninja-ai-uploads"; // đảm bảo bucket này tồn tại và có policy cho INSERT + SELECT
-
-function slugify(input: string) {
-  return (
-    input
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9\- ]/g, "")
-      .trim()
-      .replace(/\s+/g, "-")
-      .slice(0, 60) || "anonymous"
-  );
-}
-
-function getExt(file: File) {
-  // Ưu tiên lấy theo tên, fallback theo mime
-  const byName = file.name.split(".").pop()?.toLowerCase();
-  if (byName) return byName;
-  if (file.type === "application/pdf") return "pdf";
-  if (file.type === "application/msword") return "doc";
-  if (
-    file.type ===
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  )
-    return "docx";
-  return "bin";
-}
-
-function isAllowedFile(file: File) {
-  const okMimes = [
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  ];
-  const okExts = ["pdf", "doc", "docx"];
-  return okMimes.includes(file.type) || okExts.includes(getExt(file));
-}
 
 const NinjaAI = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +31,7 @@ const NinjaAI = () => {
     fullName: "",
     email: "",
     phone: "",
-    cvFile: null,
+    cvFile: null as File | null,
     motivation: "",
   });
 
@@ -92,135 +45,79 @@ const NinjaAI = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, cvFile: file }));
-  };
-
-  const uploadCV = async (file: File, fullName: string) => {
-    if (!file) throw new Error("NO_FILE");
-
-    // Validate cơ bản - Tăng giới hạn lên 10MB
-    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-    if (file.size > MAX_SIZE) {
-      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      throw new Error(`FILE_TOO_LARGE: File size ${fileSizeMB}MB exceeds 10MB limit`);
-    }
-    if (!isAllowedFile(file)) throw new Error("FILE_TYPE_NOT_ALLOWED");
-
-    const safeName = slugify(fullName || "anonymous");
-    const ext = getExt(file);
-    const unique =
-      window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
-    const filePath = `cv-files/${safeName}/${Date.now()}-${unique}.${ext}`;
-
-    const { error: upErr } = await supabase.storage
-      .from(BUCKET)
-      .upload(filePath, file, {
-        cacheControl: "3600",
-        contentType: file.type || "application/octet-stream",
-        upsert: true,
-      });
-
-    if (upErr) {
-      // Gợi ý lỗi thường gặp để bạn debug nhanh
-      // 403: thiếu policy INSERT; 404: sai BUCKET; 413: file quá lớn (nếu dùng edge function)
-      throw new Error(`UPLOAD_ERROR: ${upErr.message}`);
-    }
-
-    const { data: urlData } = supabase.storage
-      .from(BUCKET)
-      .getPublicUrl(filePath);
-    return urlData.publicUrl;
-  };
-
-  const insertApplication = async (payload: {
-    full_name: string;
-    email: string;
-    phone?: string;
-    phone_number?: string;
-    cv_url: string;
-    motivation?: string;
-  }) => {
-    // Thử bảng 'applications' trước
-    const { error: dbError } = await supabase.from("applications").insert({
-      full_name: payload.full_name,
-      email: payload.email,
-      phone: payload.phone, // cột 'phone' nếu bảng applications dùng tên này
-      cv_url: payload.cv_url,
-      motivation: payload.motivation,
-      created_at: new Date().toISOString(),
+    setFormData({
+      ...formData,
+      cvFile: file,
     });
-
-    // Nếu bảng 'applications' không tồn tại → fallback sang 'students'
-    if (
-      dbError &&
-      /relation .*applications.* does not exist/i.test(dbError.message)
-    ) {
-      const { error: dbErr2 } = await supabase.from("students").insert({
-        full_name: payload.full_name,
-        email: payload.email,
-        phone_number: payload.phone_number ?? payload.phone, // students: phone_number
-        cv_url: payload.cv_url,
-        // status: default 'pending'
-        // created_at: default NOW()
-      });
-      if (dbErr2) throw dbErr2;
-      return;
-    }
-
-    if (dbError) throw dbError;
   };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
-
-    // Validate form trước khi gửi
-    if (!formData.fullName || !formData.email || !formData.phone) {
-      toast({
-        title: "❌ Thiếu thông tin",
-        description: "Vui lòng điền Họ tên, Email và Số điện thoại.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (!formData.cvFile) {
-      toast({
-        title: "❌ Chưa chọn file CV",
-        description: "Hãy tải lên CV (.pdf, .doc, .docx) trước khi gửi.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      // 1) Upload file
-      const fileUrl = await uploadCV(formData.cvFile, formData.fullName);
+      let cvUrl = "";
 
-      // 2) Insert DB (applications → fallback students)
-      await insertApplication({
-        full_name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        phone_number: formData.phone,
-        cv_url: fileUrl,
-        motivation: formData.motivation,
-      });
+      // Upload CV file if selected
+      if (formData.cvFile) {
+        const fileExt = formData.cvFile.name.split(".").pop();
+        const fileName = `${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2)}.${fileExt}`;
 
-      // 3) Toast success (có icon)
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("cv_uploads")
+          .upload(fileName, formData.cvFile);
+
+        if (uploadError) {
+          console.error("Upload error:", uploadError);
+          toast({
+            title: "Lỗi tải file",
+            description: "Không thể tải lên file CV. Vui lòng thử lại.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        // Get public URL
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("cv_uploads").getPublicUrl(uploadData.path);
+
+        cvUrl = publicUrl;
+      }
+
+      // Submit application
+      const { data, error } = await supabase.functions.invoke(
+        "submit-application",
+        {
+          body: {
+            fullName: formData.fullName,
+            email: formData.email,
+            phoneNumber: formData.phone,
+            cvUrl: cvUrl,
+          },
+        }
+      );
+
+      if (error) {
+        console.error("Submit error:", error);
+        toast({
+          title: "Lỗi gửi đơn",
+          description: error.message || "Có lỗi xảy ra khi gửi đơn ứng tuyển",
+          variant: "destructive",
+        });
+        return;
+      }
+
       toast({
-        // Dùng emoji để chắc chắn type không lỗi + kèm icon lucide ở description
-        title: "✅ Đã gửi đơn thành công!",
-        description: (
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
-            <span>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</span>
-          </div>
-        ) as unknown as string, // Nếu TS kêu, có thể bỏ cast và chỉ dùng emoji trong title
+        title: "Đơn ứng tuyển đã được gửi!",
+        description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
       });
 
-      // 4) Reset form
+      // Reset form
       setFormData({
         fullName: "",
         email: "",
@@ -228,82 +125,12 @@ const NinjaAI = () => {
         cvFile: null,
         motivation: "",
       });
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (err: Error | unknown) {
-      console.error("UPLOAD/APPLY ERROR:", err);
-      console.error("Error details:", {
-        message: err instanceof Error ? err.message : String(err),
-        code: (err as any)?.code,
-        details: err?.details,
-        hint: err?.hint,
-        stack: err?.stack
-      });
-
-      // Map lỗi thân thiện với thông tin chi tiết hơn
-      let msg = "Đã xảy ra lỗi không xác định. Vui lòng thử lại.";
-      let suggestion = "";
-      const raw = String(err?.message || err);
-
-      if (raw.includes("NO_FILE")) {
-        msg = "Bạn chưa chọn file CV.";
-        suggestion = "Vui lòng chọn file CV (.pdf, .doc, .docx) trước khi gửi.";
-      } else if (raw.includes("FILE_TOO_LARGE")) {
-        // Extract file size from error message if available
-        const sizeMatch = raw.match(/File size ([\d.]+)MB/);
-        const actualSize = sizeMatch ? sizeMatch[1] : "unknown";
-        msg = `File quá lớn (${actualSize}MB, tối đa 10MB).`;
-        suggestion = "Vui lòng nén file hoặc chọn file khác có kích thước nhỏ hơn 10MB.";
-      } else if (raw.includes("FILE_TYPE_NOT_ALLOWED")) {
-        msg = "Định dạng file không được hỗ trợ.";
-        suggestion = "Chỉ chấp nhận file .pdf, .doc, .docx";
-      } else if (raw.includes("UPLOAD_ERROR")) {
-        if (/permission|policy|denied|unauthorized|403/i.test(raw)) {
-          msg = "Không có quyền upload file.";
-          suggestion = "Vui lòng liên hệ admin để kiểm tra cấu hình Storage Policy.";
-        } else if (/not found|bucket|404/i.test(raw)) {
-          msg = `Storage bucket không tồn tại.`;
-          suggestion = "Vui lòng liên hệ admin để kiểm tra cấu hình Supabase Storage.";
-        } else if (/network|fetch|connection/i.test(raw)) {
-          msg = "Lỗi kết nối mạng.";
-          suggestion = "Vui lòng kiểm tra kết nối internet và thử lại.";
-        } else {
-          msg = "Upload thất bại.";
-          suggestion = "Vui lòng thử lại sau ít phút hoặc liên hệ hỗ trợ.";
-        }
-      } else if (/duplicate key value violates unique constraint/i.test(raw)) {
-        if (/email/i.test(raw)) {
-          msg = "Email này đã được sử dụng.";
-          suggestion = "Vui lòng sử dụng email khác hoặc liên hệ nếu đây là email của bạn.";
-        } else {
-          msg = "Thông tin đã tồn tại trong hệ thống.";
-          suggestion = "Vui lòng kiểm tra lại thông tin hoặc liên hệ hỗ trợ.";
-        }
-      } else if (/applications.*does not exist/i.test(raw)) {
-        msg = "Lỗi cấu hình database.";
-        suggestion = "Vui lòng liên hệ admin để kiểm tra cấu hình bảng dữ liệu.";
-      } else if (/row level security|rls|policy/i.test(raw)) {
-        msg = "Lỗi phân quyền database.";
-        suggestion = "Vui lòng liên hệ admin để kiểm tra RLS policies.";
-      }
-
-      // Tạo message hiển thị với suggestion
-      const displayMessage = suggestion ? `${msg}\n${suggestion}` : msg;
-
+    } catch (error) {
+      console.error("Unexpected error:", error);
       toast({
-        title: "❌ Lỗi gửi đơn",
-        description: (
-          <div className="flex items-start gap-2">
-            <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-            <div className="text-sm">
-              <div className="font-medium">{msg}</div>
-              {suggestion && (
-                <div className="text-muted-foreground mt-1">{suggestion}</div>
-              )}
-            </div>
-          </div>
-        ) as unknown as string,
+        title: "Lỗi hệ thống",
+        description: "Có lỗi không mong muốn xảy ra. Vui lòng thử lại.",
         variant: "destructive",
-        duration: 8000, // Hiển thị lâu hơn để user đọc được suggestion
       });
     } finally {
       setIsSubmitting(false);
@@ -682,19 +509,19 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Tải lên CV / Portfolio
+                    CV / Portfolio
                   </label>
-                  <Input
-                    ref={fileInputRef}
-                    name="cvFile"
-                    type="file"
-                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    onChange={handleFileChange}
-                    className="w-full"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Chấp nhận file .pdf, .doc, .docx. Tối đa 10MB.
-                  </p>
+                  <div className="relative">
+                    <Input
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileChange}
+                      className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark"
+                    />
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      Chấp nhận file PDF, DOC, DOCX (tối đa 10MB)
+                    </div>
+                  </div>
                 </div>
               </div>
 

@@ -14,33 +14,118 @@ export type Database = {
   }
   public: {
     Tables: {
-      applications: {
+      app_settings: {
         Row: {
-          id: number
-          full_name: string
-          email: string
-          phone: string
-          cv_url: string | null
-          motivation: string
-          created_at: string
+          description: string | null
+          key: string
+          value: string
         }
         Insert: {
-          id?: number
-          full_name: string
-          email: string
-          phone: string
-          cv_url?: string | null
-          motivation: string
-          created_at?: string
+          description?: string | null
+          key: string
+          value: string
         }
         Update: {
-          id?: number
-          full_name?: string
-          email?: string
-          phone?: string
-          cv_url?: string | null
-          motivation?: string
+          description?: string | null
+          key?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      chatbot_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: number
+          role: string
+          session_id: string
+        }
+        Insert: {
+          content: string
           created_at?: string
+          id?: never
+          role: string
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: never
+          role?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chatbot_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_sessions: {
+        Row: {
+          id: string
+          session_end_at: string | null
+          session_key: string | null
+          session_start_at: string
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          session_end_at?: string | null
+          session_key?: string | null
+          session_start_at?: string
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          session_end_at?: string | null
+          session_key?: string | null
+          session_start_at?: string
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          created_at: string
+          cv_url: string
+          email: string
+          full_name: string
+          id: string
+          phone_number: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          cv_url: string
+          email: string
+          full_name: string
+          id?: string
+          phone_number: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          cv_url?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone_number?: string
+          status?: string
         }
         Relationships: []
       }
@@ -49,7 +134,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_session_owner: {
+        Args: { p_session_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
