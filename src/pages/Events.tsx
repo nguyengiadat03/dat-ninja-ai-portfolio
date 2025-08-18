@@ -14,7 +14,7 @@ const Events = () => {
       status: "upcoming",
       description:
         "Workshop thực hành xây dựng chatbot AI sử dụng OpenAI API và React. Thay thế cho lễ tân",
-      image: "/src/assets/sukien.jpg",
+      image: "https://yoxkoxpwgiwskdnjjhyd.supabase.co/storage/v1/object/sign/sukien/sukien3.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jYzBlZDFkZS00MzRjLTQ3NWMtOWQ1ZC02ZmYxNTY2ZDNiOTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdWtpZW4vc3VraWVuMy5qcGciLCJpYXQiOjE3NTU1MDU2ODYsImV4cCI6MTc4NzA0MTY4Nn0.uNYJcgjAhmMvcwqMd2usxGbhr8HtGCj-s3vMdu2K52g",
     },
     {
       title: "Tech Talk: Tương lai của Frontend Development",
@@ -25,7 +25,7 @@ const Events = () => {
       status: "upcoming",
       description:
         "Chia sẻ về những xu hướng mới trong phát triển Frontend: Web3, AI integration, và Performance optimization.",
-      image: "/src/assets/ninjaai.png",
+      image: "https://yoxkoxpwgiwskdnjjhyd.supabase.co/storage/v1/object/sign/sukien/sukien3.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jYzBlZDFkZS00MzRjLTQ3NWMtOWQ1ZC02ZmYxNTY2ZDNiOTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdWtpZW4vc3VraWVuMy5qcGciLCJpYXQiOjE3NTU1MDU3MTcsImV4cCI6MTc4NzA0MTcxN30.fJ7LrhVY_yBKuLFIXQ4uETjpZ8VUZZFwMtZO672K4pw",
     },
     {
       title: "Ninja AI Meetup #3",
@@ -36,7 +36,7 @@ const Events = () => {
       status: "upcoming",
       description:
         "Buổi gặp mặt thường kỳ của cộng đồng Ninja AI, chia sẻ dự án và networking.",
-      image: "/src/assets/sukien3.jpg",
+      image: "https://yoxkoxpwgiwskdnjjhyd.supabase.co/storage/v1/object/sign/sukien/tintuc1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jYzBlZDFkZS00MzRjLTQ3NWMtOWQ1ZC02ZmYxNTY2ZDNiOTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzdWtpZW4vdGludHVjMS5qcGciLCJpYXQiOjE3NTU1MDU3NDksImV4cCI6MTc4NzA0MTc0OX0.tBiZ22QjgIPGOhl-GV-Qsv7RxVIEKBjK9Ug4T_bOAfo",
     },
   ];
 
