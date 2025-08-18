@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown, Bell, Sun, Moon, Globe } from "lucide-react";
 import {
@@ -15,6 +15,7 @@ const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState("vi");
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -261,25 +262,24 @@ const Header = () => {
             </style>
 
             {/* Apply Now Button */}
-            <Link to="/chuong-trinh/ninja-ai" className="relative z-[9999]">
-              <Button
-                className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 
-               text-white font-semibold shadow-lg shadow-emerald-500/40 
-               hover:scale-105 hover:shadow-emerald-600/50 
-               transition-all duration-300 ease-in-out px-6 py-2 rounded-full animate-breathe"
-              >
-                <span className="relative z-10 flex items-center gap-1">
-                  🚀 Apply Now
-                </span>
+            <button
+              onClick={() => navigate('/chuong-trinh/ninja-ai', { state: { scrollToForm: true } })}
+              className="relative z-[9999] overflow-hidden bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 
+             text-white font-semibold shadow-lg shadow-emerald-500/40 
+             hover:scale-105 hover:shadow-emerald-600/50 
+             transition-all duration-300 ease-in-out px-6 py-2 rounded-full animate-breathe border-none cursor-pointer"
+            >
+              <span className="relative z-10 flex items-center gap-1">
+                🚀 Apply Now
+              </span>
 
-                {/* Hiệu ứng ánh sáng quét ngang (nhẹ nhàng) */}
-                <span
-                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent 
-                     translate-x-[-100%] hover:translate-x-[100%] 
-                     transition-transform duration-1000 ease-in-out"
-                ></span>
-              </Button>
-            </Link>
+              {/* Hiệu ứng ánh sáng quét ngang (nhẹ nhàng) */}
+              <span
+                className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent 
+                   translate-x-[-100%] hover:translate-x-[100%] 
+                   transition-transform duration-1000 ease-in-out"
+              ></span>
+            </button>
 
             {/* Mobile Menu Toggle */}
             <Button

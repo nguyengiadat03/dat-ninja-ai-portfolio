@@ -3,9 +3,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Events = () => {
   const navigate = useNavigate();
+
+  // Cuộn về đầu trang khi component load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   const events = [
     {
       title: "Lê Tân AI: Xây dựng hệ thống Chatbot AI từ A-Z",

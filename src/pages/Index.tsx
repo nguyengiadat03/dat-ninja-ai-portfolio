@@ -25,6 +25,11 @@ const Index = () => {
   const strengthsRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
 
+  // Cuộn về đầu trang khi component load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

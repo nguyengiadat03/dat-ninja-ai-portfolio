@@ -2,8 +2,13 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Eye, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 
 const News = () => {
+  // Cuộn về đầu trang khi component load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   const articles = [
     {
       title:

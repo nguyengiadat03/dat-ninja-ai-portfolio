@@ -32,11 +32,14 @@ const NinjaAI = () => {
   useEffect(() => {
     if (location.state?.scrollToForm) {
       setTimeout(() => {
-        const element = document.getElementById('registration-form');
+        const element = document.getElementById('application-form');
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }, 500);
+    } else {
+      // Cuộn về đầu trang khi không có scrollToForm
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [location.state]);
 
