@@ -19,10 +19,12 @@ import {
   Brain,
   Code,
   Rocket,
+  Upload,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 const NinjaAI = () => {
   const { toast } = useToast();
@@ -30,7 +32,7 @@ const NinjaAI = () => {
     fullName: "",
     email: "",
     phone: "",
-    cvLink: "",
+    cvFile: null as File | null,
     motivation: "",
   });
 
@@ -43,21 +45,93 @@ const NinjaAI = () => {
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData({
+      ...formData,
+      cvFile: file,
+    });
+  };
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Đơn ứng tuyển đã được gửi!",
-      description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
-    });
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      cvLink: "",
-      motivation: "",
-    });
+    setIsSubmitting(true);
+
+    try {
+      let cvUrl = "";
+
+      // Upload CV file if selected
+      if (formData.cvFile) {
+        const fileExt = formData.cvFile.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('cvs')
+          .upload(fileName, formData.cvFile);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          toast({
+            title: "Lỗi tải file",
+            description: "Không thể tải lên file CV. Vui lòng thử lại.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('cvs')
+          .getPublicUrl(uploadData.path);
+        
+        cvUrl = publicUrl;
+      }
+
+      // Submit application
+      const { data, error } = await supabase.functions.invoke('submit-application', {
+        body: {
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phone,
+          cvUrl: cvUrl,
+        },
+      });
+
+      if (error) {
+        console.error('Submit error:', error);
+        toast({
+          title: "Lỗi gửi đơn",
+          description: error.message || "Có lỗi xảy ra khi gửi đơn ứng tuyển",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Đơn ứng tuyển đã được gửi!",
+        description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+      });
+
+      // Reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        cvFile: null,
+        motivation: "",
+      });
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      toast({
+        title: "Lỗi hệ thống",
+        description: "Có lỗi không mong muốn xảy ra. Vui lòng thử lại.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const roadmapItems = [
@@ -447,15 +521,19 @@ const NinjaAI = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Link CV / Portfolio
+                    CV / Portfolio
                   </label>
-                  <Input
-                    name="cvLink"
-                    value={formData.cvLink}
-                    onChange={handleInputChange}
-                    placeholder="https://drive.google.com/..."
-                    className="w-full"
-                  />
+                  <div className="relative">
+                    <Input
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileChange}
+                      className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-dark"
+                    />
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      Chấp nhận file PDF, DOC, DOCX (tối đa 10MB)
+                    </div>
+                  </div>
                 </div>
               </div>
 
