@@ -95,7 +95,7 @@ const Index = () => {
         <div className="relative z-10 container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left animate-fade-in-left">
             <h1 className="mb-6 leading-tight">
-              <span className="block text-center text-xl md:text-4xl lg:text-5xl font-bold text-white">
+              <span className="block text-center text-xl md:text-4xl lg:text-5xl font-bold text-white -mt-2 lg:-mt-4">
                 Nguyễn Gia Đạt
               </span>
 
@@ -174,7 +174,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end animate-float">
+          <div className="flex justify-center lg:justify-end animate-float ">
             <div className="relative">
               <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden shadow-xl border-4 border-white/20">
                 <img
@@ -182,9 +182,6 @@ const Index = () => {
                   alt="Nguyễn Gia Đạt - Professional Portrait"
                   className="w-full h-full object-cover"
                 />
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-gradient-primary text-white p-4 rounded-full shadow-lg animate-pulse-glow">
-                <Code className="w-8 h-8" />
               </div>
             </div>
           </div>
@@ -287,19 +284,21 @@ const Index = () => {
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-primary" />
                     <span className="text-foreground">
-                      dat.nguyen@example.com
+                      nguyengiadat2k03@gmail.com
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <MapPin className="w-5 h-5 text-primary" />
-                    <span className="text-foreground">Hà Nội, Việt Nam</span>
+                    <span className="text-foreground">
+                      Hai Bà Trưng - Hà Nội
+                    </span>
                   </div>
                 </div>
 
                 <div className="mt-8 p-4 bg-secondary/20 rounded-lg">
                   <p className="text-muted-foreground mb-2">
-                    <strong className="text-foreground">Sở thích:</strong> Chơi
-                    game, xem phim, đọc sách về công nghệ
+                    <strong className="text-foreground">Sở thích:</strong> Đá
+                    bóng, xem phim, đọc sách về công nghệ.
                   </p>
                   <p className="text-muted-foreground">
                     <strong className="text-foreground">Mục tiêu:</strong> Trở

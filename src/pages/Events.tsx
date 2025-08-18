@@ -6,14 +6,15 @@ import { Calendar, MapPin, Users, Clock } from "lucide-react";
 const Events = () => {
   const events = [
     {
-      title: "AI Workshop: Xây dựng Chatbot từ A-Z",
-      date: "2024-02-15",
-      time: "19:00 - 21:00",
-      location: "Online via Zoom",
+      title: "Lê Tân AI: Xây dựng hệ thống Chatbot AI từ A-Z",
+      date: "2025-08-25",
+      time: "8:00 - 17:00",
+      location: "Hai Bà trưng- Hà Nội",
       participants: 150,
       status: "upcoming",
-      description: "Workshop thực hành xây dựng chatbot AI sử dụng OpenAI API và React. Phù hợp cho cả người mới bắt đầu.",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=250&fit=crop"
+      description:
+        "Workshop thực hành xây dựng chatbot AI sử dụng OpenAI API và React. Thay thế cho lễ tân",
+      image: "/src/assets/sukien.jpg",
     },
     {
       title: "Tech Talk: Tương lai của Frontend Development",
@@ -22,8 +23,9 @@ const Events = () => {
       location: "Hà Nội Tech Hub",
       participants: 80,
       status: "upcoming",
-      description: "Chia sẻ về những xu hướng mới trong phát triển Frontend: Web3, AI integration, và Performance optimization.",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop"
+      description:
+        "Chia sẻ về những xu hướng mới trong phát triển Frontend: Web3, AI integration, và Performance optimization.",
+      image: "/src/assets/ninjaai.png",
     },
     {
       title: "Ninja AI Meetup #3",
@@ -31,10 +33,11 @@ const Events = () => {
       time: "14:00 - 17:00",
       location: "WeWork Hà Nội",
       participants: 45,
-      status: "completed",
-      description: "Buổi gặp mặt thường kỳ của cộng đồng Ninja AI, chia sẻ dự án và networking.",
-      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop"
-    }
+      status: "upcoming",
+      description:
+        "Buổi gặp mặt thường kỳ của cộng đồng Ninja AI, chia sẻ dự án và networking.",
+      image: "/src/assets/sukien3.jpg",
+    },
   ];
 
   return (
@@ -46,7 +49,7 @@ const Events = () => {
             Sự kiện & Hoạt động
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Tham gia các sự kiện công nghệ, workshop và meetup để cùng học hỏi, 
+            Tham gia các sự kiện công nghệ, workshop và meetup để cùng học hỏi,
             chia sẻ kinh nghiệm và kết nối với cộng đồng developer Việt Nam.
           </p>
         </div>
@@ -54,19 +57,28 @@ const Events = () => {
         {/* Events List */}
         <div className="space-y-8">
           {events.map((event, index) => (
-            <Card key={index} className="overflow-hidden bg-gradient-card border-none shadow-lg card-hover">
+            <Card
+              key={index}
+              className="overflow-hidden bg-gradient-card border-none shadow-lg card-hover"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
                 <div className="relative h-48 lg:h-auto">
-                  <img 
-                    src={event.image} 
+                  <img
+                    src={event.image}
                     alt={event.title}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge 
-                      className={event.status === 'upcoming' ? 'bg-success text-white' : 'bg-muted text-muted-foreground'}
+                    <Badge
+                      className={
+                        event.status === "upcoming"
+                          ? "bg-success text-white"
+                          : "bg-muted text-muted-foreground"
+                      }
                     >
-                      {event.status === 'upcoming' ? 'Sắp diễn ra' : 'Đã kết thúc'}
+                      {event.status === "upcoming"
+                        ? "Sắp diễn ra"
+                        : "Đã kết thúc"}
                     </Badge>
                   </div>
                 </div>
@@ -75,7 +87,7 @@ const Events = () => {
                   <h3 className="text-2xl font-bold text-foreground mb-4">
                     {event.title}
                   </h3>
-                  
+
                   <p className="text-muted-foreground mb-6 leading-relaxed">
                     {event.description}
                   </p>
@@ -83,7 +95,9 @@ const Events = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="w-4 h-4" />
-                      <span>{new Date(event.date).toLocaleDateString('vi-VN')}</span>
+                      <span>
+                        {new Date(event.date).toLocaleDateString("vi-VN")}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Clock className="w-4 h-4" />
@@ -99,7 +113,7 @@ const Events = () => {
                     </div>
                   </div>
 
-                  {event.status === 'upcoming' && (
+                  {event.status === "upcoming" && (
                     <Button className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale">
                       Đăng ký tham gia
                     </Button>
@@ -117,7 +131,8 @@ const Events = () => {
               Muốn tổ chức sự kiện cùng tôi?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm tại các sự kiện công nghệ
+              Tôi luôn sẵn sàng chia sẻ kiến thức và kinh nghiệm tại các sự kiện
+              công nghệ
             </p>
             <Button className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale shadow-green">
               Liên hệ hợp tác
