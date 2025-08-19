@@ -24,6 +24,14 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
 
+interface ApplicationFormData {
+  fullName: string;
+  email: string;
+  phone: string;
+  cvFile: File | null;
+  motivation: string;
+}
+
 const NinjaAI = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -43,11 +51,11 @@ const NinjaAI = () => {
     }
   }, [location.state]);
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ApplicationFormData>({
     fullName: "",
     email: "",
     phone: "",
-    cvFile: null as File | null,
+    cvFile: null,
     motivation: "",
   });
 
