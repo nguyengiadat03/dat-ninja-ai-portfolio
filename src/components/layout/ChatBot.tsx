@@ -143,7 +143,7 @@ const ChatBot = () => {
       lowerMessage.includes("ninja ai") ||
       lowerMessage.includes("chương trình")
     ) {
-      return "Chương trình Thực tập sinh Ninja AI là một chương trình đào tạo chuyên sâu về AI và phát triển web. Chương trình tập trung vào việc đào tạo những kỹ năng thực tế và cung cấp kinh nghiệm làm việc với các dự án thực tế.";
+      return "**Chương trình Thực tập sinh Ninja AI** là một chương trình đào tạo chuyên sâu về AI và phát triển web:\n\n• **Học thực hành**: Tập trung vào kỹ năng thực tế và dự án thực tế\n• **Mentor 1:1**: Được hỗ trợ bởi các chuyên gia\n• **Tỷ lệ việc làm cao**: 95% sau khi hoàn thành chương trình\n• **Đào tạo toàn diện**: Từ cơ bản đến nâng cao về AI, Machine Learning, Deep Learning, NLP\n• **Kết hợp lý thuyết và thực hành**: Trên các dự án thực tế\n• **Cộng đồng năng động**: Môi trường học tập tích cực";
     }
 
     if (lowerMessage.includes("ứng tuyển") || lowerMessage.includes("apply")) {
@@ -151,11 +151,36 @@ const ChatBot = () => {
     }
 
     if (lowerMessage.includes("kỹ năng") || lowerMessage.includes("skill")) {
-      return "Các kỹ năng cần thiết bao gồm: HTML/CSS, JavaScript, React, cơ bản về AI/ML, và quan trọng nhất là tinh thần học hỏi. Chúng tôi sẽ đào tạo từ cơ bản đến nâng cao.";
+      return "**Các kỹ năng cần thiết cho chương trình Ninja AI:**\n\n• **Frontend**: HTML/CSS, JavaScript, React\n• **Backend**: Node.js, Python cơ bản\n• **AI/ML**: Kiến thức cơ bản về Machine Learning\n• **Công cụ**: Git, VS Code, Docker\n• **Soft skills**: Tư duy logic, giải quyết vấn đề\n• **Quan trọng nhất**: Tinh thần học hỏi và đam mê công nghệ\n\n*Chúng tôi sẽ đào tạo từ cơ bản đến nâng cao!*";
     }
 
     // return "Cảm ơn bạn đã hỏi! Tôi có thể giúp bạn tìm hiểu về Nguyễn Gia Đạt, chương trình Ninja AI, quá trình ứng tuyển, và các kỹ năng cần thiết. Bạn có câu hỏi cụ thể nào khác không?";
     return "Bạn có thể hỏi câu nào khôn hơn được không???";
+  };
+
+  const formatMessage = (content: string): string => {
+    // Convert bullet points to HTML
+    let formatted = content
+      // Handle bullet points with • or -
+      .replace(/^[•\-]\s*(.+)$/gm, '<li class="mb-1">$1</li>')
+      // Handle numbered lists
+      .replace(/^\d+\.\s*(.+)$/gm, '<li class="mb-1">$1</li>')
+      // Bold text patterns
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-primary">$1</strong>')
+      .replace(/__(.*?)__/g, '<strong class="font-semibold text-primary">$1</strong>')
+      // Italic text patterns
+      .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+      .replace(/_(.*?)_/g, '<em class="italic">$1</em>')
+      // Line breaks
+      .replace(/\n/g, '<br>');
+    
+    // Wrap consecutive <li> elements with <ul>
+    formatted = formatted.replace(/(<li[^>]*>.*?<\/li>(?:\s*<li[^>]*>.*?<\/li>)*)/gs, '<ul class="list-disc ml-4 space-y-1">$1</ul>');
+    
+    // Add proper line spacing
+    formatted = formatted.replace(/<br><br>/g, '<div class="my-2"></div>');
+    
+    return formatted;
   };
 
   const handleQuickQuestion = (question: string) => {
@@ -251,7 +276,12 @@ const ChatBot = () => {
                       : "bg-gray-100 text-gray-800 border border-gray-200"
                   }`}
                 >
-                  {message.content}
+                  <div
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: formatMessage(message.content),
+                    }}
+                  />
                 </div>
               </div>
             ))}
