@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import heroPortrait from "@/assets/áo mu.jpg";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
+import ContactButtons from "@/components/layout/ContactButtons";
 
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
@@ -1003,6 +1004,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
+      {/* Contact Buttons */}
+      <ContactButtons />
     </div>
   );
 };

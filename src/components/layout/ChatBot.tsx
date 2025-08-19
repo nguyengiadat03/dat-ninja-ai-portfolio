@@ -10,6 +10,8 @@ import {
   Image,
   MoreHorizontal,
   Sparkles,
+  RotateCcw,
+  Paperclip,
 } from "lucide-react";
 
 interface Message {
@@ -24,8 +26,13 @@ const ChatBot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content:
-        "Xin chào! Tôi là ĐạtGPT 🤖 Tôi có thể giúp bạn tìm hiểu về Nguyễn Gia Đạt và Chương trình TTS Ninja AI. Bạn muốn biết điều gì?",
+      content: "Xin chào! Tôi là ĐạtGPT 🤖",
+      isUser: false,
+      timestamp: new Date(),
+    },
+    {
+      id: "2",
+      content: "Tôi có thể giúp bạn tìm hiểu về Nguyễn Gia Đạt và Chương trình TTS Ninja AI. Bạn muốn biết điều gì?",
       isUser: false,
       timestamp: new Date(),
     },
@@ -50,7 +57,9 @@ const ChatBot = () => {
   }, [messages]);
 
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [sessionKey] = useState(() => 'session_' + Math.random().toString(36).substr(2, 9));
+  const [sessionKey] = useState(
+    () => "session_" + Math.random().toString(36).substr(2, 9)
+  );
 
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
@@ -67,17 +76,20 @@ const ChatBot = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch('https://yoxkoxpwgiwskdnjjhyd.supabase.co/functions/v1/chatbot-ai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: content,
-          sessionId,
-          sessionKey,
-        }),
-      });
+      const response = await fetch(
+        "https://yoxkoxpwgiwskdnjjhyd.supabase.co/functions/v1/chatbot-ai",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: content,
+            sessionId,
+            sessionKey,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -89,7 +101,7 @@ const ChatBot = () => {
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, aiResponse]);
-        
+
         // Save session ID for future messages
         if (data.sessionId && !sessionId) {
           setSessionId(data.sessionId);
@@ -104,7 +116,7 @@ const ChatBot = () => {
         setMessages((prev) => [...prev, errorMessage]);
       }
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error("Chat error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: "Xin lỗi, có lỗi kết nối. Vui lòng thử lại sau.",
@@ -166,28 +178,61 @@ const ChatBot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-[400px] h-[500px] z-50 flex flex-col bg-card/95 backdrop-blur-md border shadow-xl animate-scale-in">
+        <Card className="fixed bottom-6 right-6 w-[420px] h-[550px] z-50 flex flex-col bg-card/95 backdrop-blur-md border shadow-xl animate-scale-in">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border bg-gradient-primary text-white rounded-t-lg">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <Sparkles className="w-4 h-4" />
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <img
+                    src="https://giadat.ninjaai.vn/assets/%C3%A1o%20mu-D3edYUI2.jpg"
+                    alt="Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
               <div>
                 <h3 className="text-center font-semibold">ĐạtGPT</h3>
-                <p className="text-center text-xs text-white/80">
-                  AI Assistant
-                </p>
+                <p className="text-xs text-white/80 font-bold mt-1">Online</p>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20"
-            >
-              <X className="w-4 h-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                    setMessages([
+                      {
+                        id: "1",
+                        content: "Xin chào! Tôi là ĐạtGPT 🤖",
+                        isUser: false,
+                        timestamp: new Date(),
+                      },
+                      {
+                        id: "2",
+                        content: "Tôi có thể giúp bạn tìm hiểu về Nguyễn Gia Đạt và Chương trình TTS Ninja AI. Bạn muốn biết điều gì?",
+                        isUser: false,
+                        timestamp: new Date(),
+                      },
+                    ]);
+                  setSessionId(null);
+                }}
+                className="text-white hover:bg-white/20"
+                title="Reset cuộc trò chuyện"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+                className="text-white hover:bg-white/20"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {/* Messages */}
@@ -200,10 +245,10 @@ const ChatBot = () => {
                 }`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                  className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-line leading-relaxed ${
                     message.isUser
-                      ? "bg-primary text-white rounded-br-none"
-                      : "bg-muted text-foreground rounded-bl-none"
+                      ? "bg-primary text-white"
+                      : "bg-gray-100 text-gray-800 border border-gray-200"
                   }`}
                 >
                   {message.content}
@@ -213,11 +258,14 @@ const ChatBot = () => {
 
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-muted text-foreground p-3 rounded-lg rounded-bl-none text-sm">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce animate-bounce-delay-1"></div>
-                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce animate-bounce-delay-2"></div>
+                <div className="bg-gray-100 text-gray-800 border border-gray-200 p-3 rounded-2xl text-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce animate-bounce-delay-1"></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce animate-bounce-delay-2"></div>
+                    </div>
+                    <span className="text-xs text-gray-500">đang soạn...</span>
                   </div>
                 </div>
               </div>
@@ -227,19 +275,19 @@ const ChatBot = () => {
           </div>
 
           {/* Quick Questions */}
-          {messages.length === 1 && (
+          {messages.length === 2 && (
             <div className="px-4 py-2 border-t border-border bg-muted/30">
               <div className="text-xs text-muted-foreground mb-2">
                 Câu hỏi gợi ý:
               </div>
-              <div className="grid grid-cols-1 gap-1">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {quickQuestions.map((question, index) => (
                   <Button
                     key={index}
                     variant="secondary"
                     size="sm"
                     onClick={() => handleQuickQuestion(question)}
-                    className="text-xs h-auto p-2 justify-start text-left"
+                    className="text-xs h-auto p-2 whitespace-nowrap flex-shrink-0 min-w-fit"
                   >
                     {question}
                   </Button>
@@ -251,10 +299,36 @@ const ChatBot = () => {
           {/* Input */}
           <div className="p-4 border-t border-border">
             <div className="flex space-x-2 items-center">
+              <input
+                aria-label="File upload input"
+                title="Choose a file to upload"
+                placeholder="Select file to upload"
+                type="file"
+                id="file-upload"
+                className="hidden"
+                accept="*/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    // Handle file upload here
+                    console.log("File selected:", file.name);
+                  }
+                }}
+              />
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-muted-foreground hover:text-primary"
+                onClick={() => document.getElementById("file-upload")?.click()}
+                title="Đính kèm tệp"
+              >
+                <Paperclip className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-primary"
+                title="Gửi hình ảnh"
               >
                 <Image className="w-4 h-4" />
               </Button>
@@ -265,19 +339,13 @@ const ChatBot = () => {
                 onKeyPress={(e) => {
                   if (e.key === "Enter") sendMessage(inputValue);
                 }}
-                className="flex-1 text-sm"
+                className="flex-1 text-sm rounded-xl"
               />
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-primary"
-              >
-                <MoreHorizontal className="w-4 h-4" />
-              </Button>
               <Button
                 onClick={() => sendMessage(inputValue)}
                 size="sm"
-                className="bg-primary text-white hover:bg-primary-dark"
+                className="bg-primary text-white hover:bg-primary-dark rounded-xl"
+                disabled={!inputValue.trim()}
               >
                 <Send className="w-4 h-4" />
               </Button>
