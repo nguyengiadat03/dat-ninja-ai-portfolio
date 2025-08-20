@@ -33,6 +33,32 @@ serve(async (req) => {
       );
     }
 
+    // Pre-check duplicates before inserting
+    const { data: existing, error: checkError } = await supabase
+      .from('students')
+      .select('email, phone_number')
+      .or(`email.eq.${email},phone_number.eq.${phoneNumber}`)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('Duplicate check error:', checkError);
+    }
+
+    if (existing) {
+      const duplicateField = existing.email === email ? 'email' : 'phone_number';
+      const message = duplicateField === 'email'
+        ? 'Email này đã được sử dụng'
+        : 'Số điện thoại này đã được sử dụng';
+
+      // Return 200 with explicit error to avoid generic non-2xx client error messages
+      return new Response(
+        JSON.stringify({ success: false, error: message }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     // Insert into students table
     console.log('Attempting to insert:', { fullName, email, phoneNumber, cvUrl });
     
