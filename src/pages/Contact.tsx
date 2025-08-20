@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, MessageCircle, Calendar } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageCircle, Calendar, Github, Linkedin, Facebook, Zap, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
@@ -116,6 +116,52 @@ const Contact = () => {
                 </Button>
               </div>
             </Card>
+
+            {/* Quick Contact */}
+            <Card className="p-6 bg-gradient-card border-none card-hover">
+              <div className="text-center mb-4">
+                <Zap className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                <h3 className="font-semibold text-foreground">Liên hệ nhanh</h3>
+                <p className="text-sm text-muted-foreground">Kết nối qua mạng xã hội</p>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-3">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-300"
+                >
+                  <Facebook className="w-5 h-5 text-blue-600" />
+                  <span className="text-xs">Facebook</span>
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-500"
+                >
+                  <Linkedin className="w-5 h-5 text-blue-700" />
+                  <span className="text-xs">LinkedIn</span>
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-gray-50 hover:border-gray-400"
+                >
+                  <Github className="w-5 h-5 text-gray-700" />
+                  <span className="text-xs">GitHub</span>
+                </Button>
+              </div>
+              
+              <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-2 text-green-700">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">Online ngay bây giờ</span>
+                </div>
+                <p className="text-xs text-green-600 mt-1">Phản hồi trong vòng 30 phút</p>
+              </div>
+            </Card>
           </div>
 
           {/* Contact Form */}
@@ -209,8 +255,6 @@ const Contact = () => {
 
             {/* FAQ Section */}
             <Card className="mt-8 p-8 bg-gradient-card border-none">
-              <h3 className="text-xl font-bold text-foreground mb-6">Câu hỏi thường gặp</h3>
-              
               <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-foreground mb-2">
@@ -239,6 +283,62 @@ const Contact = () => {
                   </p>
                 </div>
               </div>
+            </Card>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Câu hỏi thường gặp</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Những câu hỏi phổ biến mà khách hàng thường quan tâm
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6 bg-gradient-card border-none card-hover">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-primary" />
+                Thời gian phản hồi như thế nào?
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Tôi thường phản hồi email trong vòng 24 giờ làm việc. Đối với các dự án khẩn cấp, 
+                bạn có thể liên hệ qua số điện thoại để được hỗ trợ nhanh hơn.
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-card border-none card-hover">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-primary" />
+                Có làm việc ngoài giờ không?
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Tôi làm việc từ 8:00 - 18:00 các ngày trong tuần. Tuy nhiên, với các dự án quan trọng, 
+                tôi sẵn sàng hỗ trợ ngoài giờ khi cần thiết.
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-card border-none card-hover">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Send className="w-5 h-5 text-primary" />
+                Quy trình làm việc ra sao?
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Tôi bắt đầu bằng việc tìm hiểu yêu cầu, sau đó lập kế hoạch chi tiết, 
+                thực hiện và báo cáo tiến độ định kỳ cho khách hàng.
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-card border-none card-hover">
+              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-primary" />
+                Có hỗ trợ sau dự án không?
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Có, tôi cung cấp hỗ trợ kỹ thuật miễn phí trong 30 ngày đầu sau khi bàn giao dự án. 
+                Sau đó sẽ có gói bảo trì theo thoả thuận.
+              </p>
             </Card>
           </div>
         </div>

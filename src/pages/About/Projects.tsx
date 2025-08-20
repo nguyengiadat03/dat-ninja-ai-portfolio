@@ -10,7 +10,7 @@ const Projects = () => {
       description:
         "Nền tảng thương mại điện tử hoàn chỉnh với tính năng thanh toán trực tuyến, quản lý sản phẩm và hệ thống đánh giá người dùng.",
       image:
-        "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=300&fit=crop",
+        "https://aslgate.com/wp-content/uploads/2019/11/E-commerce-Platform.png",
       technologies: ["React", "Node.js", "MongoDB", "Stripe API", "JWT"],
       liveUrl: "#",
       githubUrl: "#",
@@ -28,7 +28,7 @@ const Projects = () => {
       description:
         "Chatbot AI hỗ trợ tư vấn y tế cơ bản, tích hợp với hệ thống bệnh viện và có khả năng học hỏi từ dữ liệu bệnh nhân.",
       image:
-        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500&h=300&fit=crop",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDGsl-hfwHW2xyuq5_2kPqhPYv9Tn1QsAarg&s",
       technologies: [
         "Python",
         "TensorFlow",
@@ -70,7 +70,7 @@ const Projects = () => {
       description:
         "Dashboard điều khiển và giám sát các thiết bị IoT trong nhà thông minh, với tính năng tự động hóa và báo cáo năng lượng.",
       image:
-        "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500&h=300&fit=crop",
+        "https://www.graduateprogram.org/wp-content/uploads/2023/07/July-11-The-Vitality-of-Learning-Management-Systems-in-Modern-Learning-Environments_web-1024x580.jpg",
       technologies: ["Vue.js", "Express.js", "InfluxDB", "MQTT", "D3.js"],
       liveUrl: "#",
       githubUrl: "#",
