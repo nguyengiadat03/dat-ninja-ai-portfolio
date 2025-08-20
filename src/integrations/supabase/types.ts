@@ -32,6 +32,42 @@ export type Database = {
         }
         Relationships: []
       }
+      applications: {
+        Row: {
+          created_at: string | null
+          cv_url: string | null
+          email: string
+          full_name: string
+          id: number
+          motivation: string | null
+          phone: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cv_url?: string | null
+          email: string
+          full_name: string
+          id?: number
+          motivation?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cv_url?: string | null
+          email?: string
+          full_name?: string
+          id?: number
+          motivation?: string | null
+          phone?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       chatbot_messages: {
         Row: {
           content: string
