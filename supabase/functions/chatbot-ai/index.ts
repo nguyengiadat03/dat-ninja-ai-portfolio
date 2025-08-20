@@ -1,5 +1,5 @@
-import { serve } from "https://esm.sh/v135/deno.land/std@0.208.0/http/server.ts";
-import "https://esm.sh/v135/deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from '@supabase/supabase-js';
 
 const corsHeaders = {
@@ -15,11 +15,11 @@ serve(async (req) => {
 
   try {
     // Initialize Supabase client
-    const supabaseUrl = process.env.SUPABASE_URL!;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
     if (!GEMINI_API_KEY) {
       throw new Error('GEMINI_API_KEY is not set');
     }

@@ -33,6 +33,38 @@ serve(async (req) => {
       );
     }
 
+    // Check for email duplicates
+    const { data: emailCheck } = await supabase
+      .from('students')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (emailCheck) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Email này đã được sử dụng' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    // Check for phone duplicates
+    const { data: phoneCheck } = await supabase
+      .from('students')
+      .select('id')
+      .eq('phone_number', phoneNumber)
+      .maybeSingle();
+
+    if (phoneCheck) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Số điện thoại này đã được sử dụng' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     // Insert into students table
     console.log('Attempting to insert:', { fullName, email, phoneNumber, cvUrl });
     

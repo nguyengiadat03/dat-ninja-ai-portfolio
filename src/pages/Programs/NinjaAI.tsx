@@ -125,12 +125,22 @@ const NinjaAI = () => {
         }
       );
 
-      if (error) {
-        console.error("Submit error:", error);
+      // Handle response including duplicate checks returned as success:false
+      if (data && (data as any).success === false) {
         toast({
-          title: "Lỗi gửi đơn",
-          description: error.message || "Có lỗi xảy ra khi gửi đơn ứng tuyển",
-          variant: "destructive",
+          title: 'Không thể gửi đơn',
+          description: (data as any).error || 'Thông tin đã tồn tại. Vui lòng kiểm tra lại.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (error) {
+        console.error('Submit error:', error);
+        toast({
+          title: 'Lỗi gửi đơn',
+          description: error.message || 'Có lỗi xảy ra khi gửi đơn ứng tuyển',
+          variant: 'destructive',
         });
         return;
       }
