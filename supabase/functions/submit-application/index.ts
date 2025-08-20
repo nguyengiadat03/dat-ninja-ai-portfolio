@@ -33,26 +33,32 @@ serve(async (req) => {
       );
     }
 
-    // Pre-check duplicates before inserting
-    const { data: existing, error: checkError } = await supabase
+    // Check for email duplicates
+    const { data: emailCheck } = await supabase
       .from('students')
-      .select('email, phone_number')
-      .or(`email.eq.${email},phone_number.eq.${phoneNumber}`)
+      .select('id')
+      .eq('email', email)
       .maybeSingle();
 
-    if (checkError) {
-      console.error('Duplicate check error:', checkError);
+    if (emailCheck) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Email này đã được sử dụng' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
 
-    if (existing) {
-      const duplicateField = existing.email === email ? 'email' : 'phone_number';
-      const message = duplicateField === 'email'
-        ? 'Email này đã được sử dụng'
-        : 'Số điện thoại này đã được sử dụng';
+    // Check for phone duplicates
+    const { data: phoneCheck } = await supabase
+      .from('students')
+      .select('id')
+      .eq('phone_number', phoneNumber)
+      .maybeSingle();
 
-      // Return 200 with explicit error to avoid generic non-2xx client error messages
+    if (phoneCheck) {
       return new Response(
-        JSON.stringify({ success: false, error: message }),
+        JSON.stringify({ success: false, error: 'Số điện thoại này đã được sử dụng' }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
