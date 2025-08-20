@@ -210,7 +210,7 @@ const Skills = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-green-200 py-20">
+    <div className="min-h-screen bg-[url('https://mega.com.vn/media/news/2406_hinh-nen-green-4k26.jpg')] bg-cover bg-center py-20">
       <div className="container bg-gradient-to-b mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
@@ -255,7 +255,7 @@ const Skills = () => {
                     <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                       <div
                         className="bg-primary h-2 rounded-full w-0 group-hover:w-[var(--skill-level)] transition-all duration-1000"
-                        style={{ ["--skill-level" as any]: `${skill.level}%` }}
+                        style={{ ["--skill-level" as string]: `${skill.level}%` }}
                       />
                     </div>
                   </div>

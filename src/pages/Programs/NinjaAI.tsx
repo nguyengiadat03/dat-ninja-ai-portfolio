@@ -17,6 +17,7 @@ import {
   Code,
   Rocket,
   Upload,
+  ArrowRight,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
@@ -321,7 +322,7 @@ const NinjaAI = () => {
 
       {/* Program Overview */}
       <section id="program-details" className="py-20 bg-background-secondary">
-        <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Tổng quan chương trình
@@ -374,6 +375,67 @@ const NinjaAI = () => {
                 </p>
               </Card>
             ))}
+          </div>
+        </div>
+        </section>
+      <section id="program-details" className="py-20 bg-background-secondary">
+        {/* Mục tiêu chương trình */}
+        <div className="container mx-auto px-4 mb-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Mục tiêu chương trình
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Chương trình Ninja AI được thiết kế để đào tạo thế hệ kỹ sư công nghệ mới - những người không chỉ thành thạo về lập trình mà còn hiểu sâu về lập trình và ứng dụng AI vào công việc, đời sống và có khả năng áp dụng vào các dự án thực tế.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Kỹ năng cốt lõi */}
+            <Card className="p-8 bg-gradient-to-br from-blue-50 to-indigo-100 border-none shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                  <Code className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Kỹ năng cốt lõi</h3>
+              </div>
+              <div className="space-y-4 ">
+                {[
+                  { icon: <Zap className="w-5 h-5" />, text: "Full-stack development" },
+                  { icon: <Brain className="w-5 h-5" />, text: "Building a strong Blockchain, AI community" },
+                  { icon: <Target className="w-5 h-5" />, text: "Problem-solving mindset - AI First" },
+                  { icon: <Users className="w-5 h-5" />, text: "Team collaboration" }
+                ].map((skill, index) => (
+                  <div key={index} className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200">
+                    <div className="text-blue-600 ">{skill.icon}</div>
+                    <span className="text-gray-700 font-medium">{skill.text}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Đầu ra mong đợi */}
+            <Card className="p-8 bg-gradient-to-br from-green-50 to-emerald-100 border-none shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Đầu ra mong đợi</h3>
+              </div>
+              <div className="space-y-4">
+                {[
+                  { icon: <CheckCircle className="w-5 h-5" />, text: "Fresher/Junior Developer ready" },
+                  { icon: <Rocket className="w-5 h-5" />, text: "Portfolio dự án thực tế + Chatbot AI" },
+                  { icon: <Users className="w-5 h-5" />, text: "Kết nối industry network" },
+                  { icon: <Sparkles className="w-5 h-5" />, text: "Mindset startup - Mindset AI First" }
+                ].map((outcome, index) => (
+                  <div key={index} className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200">
+                    <div className="text-green-600">{outcome.icon}</div>
+                    <span className="text-gray-700 font-medium">{outcome.text}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -466,6 +528,761 @@ const NinjaAI = () => {
                 </div>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Current Internship Projects */}
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Dự án thực tập sinh đang thực hiện
+            </h2>
+            <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Các dự án thực tế mà thực tập sinh Ninja AI đang phát triển, từ AI Chatbot đến Blockchain DApp và IoT Smart Home
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* AI Chatbot Platform */}
+            <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">AI Chatbot Platform</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Nền tảng chatbot AI với khả năng xử lý ngôn ngữ tự nhiên và tích hợp vector database.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">React + TypeScript Frontend</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Node.js + OpenAI API Backend</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Vector Database Integration</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Real-time Chat Interface</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* E-commerce CRM System */}
+            <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">E-commerce CRM System</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Hệ thống CRM thương mại điện tử với AI analytics và email automation.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Next.js + Prisma Stack</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">PostgreSQL Database</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">AI-powered Analytics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Email Automation</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* Blockchain DApp */}
+            <Card className="p-6 bg-gradient-to-br from-purple-50 to-violet-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-600 rounded-full flex items-center justify-center">
+                  <Code className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">Blockchain DApp</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Ứng dụng phi tập trung cho việc quản lý và xác thực chứng chỉ giáo dục trên blockchain.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Solidity Smart Contracts</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Web3.js Integration</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">MetaMask Wallet Connect</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">IPFS File Storage</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* AI Learning Mobile App */}
+            <Card className="p-6 bg-gradient-to-br from-orange-50 to-amber-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
+                  <BookOpen className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">AI Learning Mobile App</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Ứng dụng mobile học tập cá nhân hóa với AI tutor và gamification elements.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">React Native + Expo</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Firebase Backend</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">AI Recommendation Engine</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Offline Learning Support</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* AI Data Analytics Platform */}
+            <Card className="p-6 bg-gradient-to-br from-red-50 to-pink-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">AI Data Analytics Platform</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Nền tảng phân tích dữ liệu với machine learning models và interactive dashboards.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Python + FastAPI</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">TensorFlow/PyTorch ML</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">D3.js Data Visualization</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Real-time Data Processing</span>
+                </div>
+              </div>
+            </Card>
+
+            {/* IoT Smart Home System */}
+            <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-100 border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full flex items-center justify-center">
+                  <Rocket className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">IoT Smart Home System</h3>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Hệ thống nhà thông minh với AI automation và voice control integration.
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Arduino/Raspberry Pi</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">MQTT Protocol</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Voice Assistant Integration</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">Mobile Control App</span>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <Card className="p-8 bg-gradient-to-r from-indigo-50 to-purple-50 border-none shadow-lg max-w-4xl mx-auto">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Sparkles className="w-8 h-8 text-indigo-600" />
+                <h3 className="text-2xl font-bold text-gray-800">Tham gia ngay để trải nghiệm</h3>
+              </div>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                Các dự án này không chỉ là bài tập mà là sản phẩm thực tế được sử dụng bởi người dùng thật. 
+                Thực tập sinh sẽ được làm việc trực tiếp với các công nghệ tiên tiến và học hỏi từ mentor kinh nghiệm.
+              </p>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() =>
+                  document
+                    .getElementById("application-form")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Ứng tuyển ngay để tham gia dự án
+                <Rocket className="w-5 h-5 ml-2" />
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Work Philosophy */}
+      <section className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+                <Rocket className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              🚀 Phương châm làm việc
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Những nguyên tắc cốt lõi định hướng hành trình trở thành Ninja AI
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+               {
+                 emoji: "🎯",
+                 title: "AI First Mindset",
+                 description: "Luôn ưu tiên tư duy AI trong mọi giải pháp. Không chỉ học công nghệ mà còn hiểu cách áp dụng AI để tối ưu hóa quy trình làm việc.",
+                 color: "from-blue-500 to-cyan-600",
+                 bgGradient: "from-blue-50 via-cyan-50 to-blue-100"
+               },
+               {
+                 emoji: "⚡",
+                 title: "Learn Fast, Build Faster",
+                 description: "Học nhanh, thực hành ngay. Mỗi kiến thức mới phải được áp dụng vào dự án thực tế trong vòng 24 giờ.",
+                 color: "from-yellow-500 to-orange-600",
+                 bgGradient: "from-yellow-50 via-orange-50 to-amber-100"
+               },
+               {
+                 emoji: "🤝",
+                 title: "Community Driven",
+                 description: "Xây dựng và phát triển cùng cộng đồng. Chia sẻ kiến thức, hỗ trợ lẫn nhau và cùng nhau tiến bộ.",
+                 color: "from-green-500 to-emerald-600",
+                 bgGradient: "from-green-50 via-emerald-50 to-teal-100"
+               },
+               {
+                 emoji: "🔥",
+                 title: "Passion Over Perfection",
+                 description: "Đam mê là động lực chính. Không ngại thất bại, luôn sẵn sàng thử nghiệm và học hỏi từ mỗi sai lầm.",
+                 color: "from-red-500 to-pink-600",
+                 bgGradient: "from-red-50 via-pink-50 to-rose-100"
+               },
+               {
+                 emoji: "🌟",
+                 title: "Innovation Mindset",
+                 description: "Luôn tìm kiếm cách làm mới, sáng tạo. Không chỉ làm theo mà còn tạo ra những giải pháp độc đáo.",
+                 color: "from-purple-500 to-indigo-600",
+                 bgGradient: "from-purple-50 via-violet-50 to-indigo-100"
+               },
+               {
+                 emoji: "🚀",
+                 title: "Ship It Mentality",
+                 description: "Hoàn thành và triển khai sản phẩm thực tế. Từ ý tưởng đến sản phẩm có thể sử dụng được.",
+                 color: "from-teal-500 to-blue-600",
+                 bgGradient: "from-teal-50 via-sky-50 to-blue-100"
+               }
+             ].map((principle, index) => (
+              <Card
+                 key={index}
+                 className={`p-6 card-hover bg-gradient-to-br ${principle.bgGradient} backdrop-blur-sm border-none shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+               >
+                <div className="text-center">
+                  <div className="text-4xl mb-4">{principle.emoji}</div>
+                  <div className={`w-full h-1 bg-gradient-to-r ${principle.color} rounded-full mb-4`}></div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                     {principle.title}
+                   </h3>
+                   <p className="text-gray-700 leading-relaxed text-sm">
+                     {principle.description}
+                   </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <Card className="p-8 bg-gradient-to-r from-amber-100 via-orange-100 to-red-100 border-none shadow-xl max-w-4xl mx-auto transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="text-3xl">🥷</div>
+                <h3 className="text-2xl font-bold text-gray-800">Ninja Code</h3>
+                <div className="text-3xl">🥷</div>
+              </div>
+              <blockquote className="text-lg italic text-gray-700 leading-relaxed">
+                "Một Ninja AI không chỉ viết code, mà còn tạo ra những giải pháp thông minh. 
+                Chúng ta không chỉ theo kịp công nghệ, mà còn dẫn đầu xu hướng. 
+                Mỗi dòng code đều mang sứ mệnh tạo ra tương lai tốt đẹp hơn."
+              </blockquote>
+              <div className="mt-4 text-sm text-gray-600 font-medium">
+                - Ninja AI Community
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Student Testimonials */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Thực tập sinh nói gì về Ninja AI
+            </h2>
+            <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Những chia sẻ chân thật từ các thực tập sinh đã trải nghiệm chương trình Ninja AI
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Chu Tiến Sơn */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  CS
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Chu Tiến Sơn</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Chương trình thực tập tại Ninja AI đã giúp tôi phát triển kỹ năng AI/ML một cách bài bản."
+              </p>
+            </Card>
+
+            {/* Đàm Hữu Phú */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  ĐP
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Đàm Hữu Phú</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Môi trường làm việc chuyên nghiệp và mentor hỗ trợ nhiệt tình."
+              </p>
+            </Card>
+
+            {/* Lê Huỳnh */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  LH
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Lê Huỳnh</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Tôi đã học được cách áp dụng AI vào giải quyết các bài toán thực tế."
+              </p>
+            </Card>
+
+            {/* Lê Thành Chỉnh */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  TC
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Lê Thành Chỉnh</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Chương trình giúp tôi tự tin hơn trong việc phát triển các ứng dụng AI."
+              </p>
+            </Card>
+
+            {/* Vi Nguyễn Ngọc Châu */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  VC
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Vi Nguyễn Ngọc Châu</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Kiến thức thực tế và cơ hội làm việc với các dự án thật sự ấn tượng."
+              </p>
+            </Card>
+
+            {/* Nguyễn Hoàng Kiên */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  NK
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Nguyễn Hoàng Kiên</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Mentor rất tận tâm và luôn sẵn sàng hỗ trợ khi gặp khó khăn."
+              </p>
+            </Card>
+
+            {/* Trần Hữu Ánh Băng */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  TB
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Trần Hữu Ánh Băng</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Từ zero đến hero trong AI, chương trình thực sự hiệu quả."
+              </p>
+            </Card>
+
+            {/* Vũ Phương Nam */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  VN
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Vũ Phương Nam</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Cộng đồng Ninja AI rất supportive và đầy năng lượng tích cực."
+              </p>
+            </Card>
+
+            {/* Trịnh Nam Sơn */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  TS
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Trịnh Nam Sơn</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Học được rất nhiều về Machine Learning và Deep Learning thực tế."
+              </p>
+            </Card>
+
+            {/* Lê Gia Đạt */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  LĐ
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Lê Gia Đạt</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Portfolio sau khóa học giúp tôi dễ dàng tìm được việc làm mơ ước."
+              </p>
+            </Card>
+
+            {/* Nguyễn Tiến Long */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  NL
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Nguyễn Tiến Long</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Chương trình thực tập đã thay đổi hoàn toàn career path của tôi."
+              </p>
+            </Card>
+
+            {/* Phạm Minh Tuấn */}
+            <Card className="p-6 bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-slate-500 to-gray-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  PT
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-800">Phạm Minh Tuấn</h3>
+                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                ))}
+              </div>
+              <p className="text-gray-700 italic leading-relaxed">
+                "Kiến thức AI được ứng dụng ngay vào công việc, rất thực tế và hiệu quả."
+              </p>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <Card className="p-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-none shadow-lg max-w-4xl mx-auto">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Users className="w-8 h-8 text-blue-600" />
+                <h3 className="text-2xl font-bold text-gray-800">Bạn cũng muốn trở thành Ninja AI?</h3>
+              </div>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                Hãy tham gia cùng chúng tôi để trải nghiệm chương trình đào tạo AI chuyên nghiệp và 
+                kết nối với cộng đồng những người đam mê công nghệ.
+              </p>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() =>
+                  document
+                    .getElementById("application-form")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Ứng tuyển ngay
+                <Sparkles className="w-5 h-5 ml-2" />
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Target Participants */}
+      <section className="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Đối tượng tham gia
+            </h2>
+            <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Chương trình Ninja AI dành cho những ai có đam mê và quyết tâm phát triển trong lĩnh vực AI
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Phù hợp với */}
+            <Card className="p-8 bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                  <span className="text-3xl">✅</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Phù hợp với</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Sinh viên năm cuối hoặc fresh graduate IT</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Người đã có kiến thức cơ bản về lập trình</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Có đam mê học hỏi và phát triển bản thân</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Sẵn sàng commit full-time trong 3 tháng</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Muốn làm việc trong môi trường startup</span>
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Yêu cầu kỹ năng */}
+            <Card className="p-8 bg-white border-none shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-3xl">📋</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Yêu cầu kỹ năng</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Hiểu biết cơ bản về HTML, CSS, JavaScript</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Đã từng làm ít nhất 1 dự án cá nhân</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Kỹ năng tiếng Anh đọc hiểu tài liệu</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Thái độ học hỏi và tinh thần teamwork</span>
+                  </p>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Có laptop cá nhân</span>
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-16">
+            <Card className="p-8 bg-gradient-to-r from-purple-50 to-indigo-50 border-none shadow-lg max-w-4xl mx-auto">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Target className="w-8 h-8 text-purple-600" />
+                <h3 className="text-2xl font-bold text-gray-800">Bạn đã sẵn sàng chưa?</h3>
+              </div>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                Nếu bạn thấy mình phù hợp với các tiêu chí trên, đừng ngần ngại ứng tuyển ngay hôm nay!
+              </p>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() =>
+                  document
+                    .getElementById("application-form")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Bắt đầu hành trình Ninja AI
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Card>
           </div>
         </div>
       </section>

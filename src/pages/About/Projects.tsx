@@ -86,7 +86,7 @@ const Projects = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-green-200 py-20">
+    <div className="min-h-screen bg-[url('https://mega.com.vn/media/news/2406_hinh-nen-green-4k26.jpg')] bg-cover bg-center py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">

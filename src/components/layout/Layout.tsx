@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import ChatBot from "./ChatBot";
+import ContactButtons from "./ContactButtons";
+import ScrollToTop from "./ScrollToTop";
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,6 +18,8 @@ const Layout = ({ children }: LayoutProps) => {
       </main>
       <Footer />
       <ChatBot />
+      <ContactButtons />
+      <ScrollToTop />
     </div>
   );
 };

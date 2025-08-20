@@ -3,9 +3,8 @@ import { Phone, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-// Thay bằng link logo Zalo (SVG/PNG). Có thể đặt trong /public/images/zalo.png
-const zaloIcon = "https://hidosport.vn/wp-content/uploads/2023/09/zalo-icon.png";
-
+const zaloIcon =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/2048px-Icon_of_Zalo.svg.png";
 const ContactButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,7 +43,7 @@ const ContactButtons = () => {
                 key={index}
                 variant="ghost"
                 size="sm"
-                className="justify-start gap-3 h-10 hover:bg-gray-100"
+                className="justify-start gap-3 h-10 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 hover:scale-105"
                 onClick={() => {
                   option.action();
                   setIsOpen(false);
@@ -68,11 +67,12 @@ const ContactButtons = () => {
           <span className="absolute inset-0 rounded-full bg-blue-400 opacity-30 animate-ping"></span>
           <span className="absolute inset-0 rounded-full bg-blue-300 opacity-20 animate-ping [animation-delay:0.5s]"></span>
           <span className="absolute inset-0 rounded-full bg-blue-200 opacity-10 animate-ping [animation-delay:1s]"></span>
-
           {/* Icon Zalo */}
-          <div className="relative z-10 w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-white">
-            <img src={zaloIcon} alt="Zalo" className="w-10 h-10 object-contain" />
-          </div>
+          <img
+            src={zaloIcon}
+            alt="Zalo"
+            className="w-13 h-13 object-contain"
+          />
         </Button>
       </div>
     </div>

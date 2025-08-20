@@ -12,7 +12,7 @@ import universityCampus from "@/assets/university-campus.jpg";
 
 const Education = () => {
   return (
-    <div className="min-h-screen py-20 bg-green-200 from-emerald-50 to-white">
+    <div className="min-h-screen py-20 bg-[url('https://mega.com.vn/media/news/2406_hinh-nen-green-4k26.jpg')] bg-cover bg-center from-emerald-50 to-white">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16 animate-fadeIn">
