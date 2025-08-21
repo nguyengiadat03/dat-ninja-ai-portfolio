@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Phone, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,24 @@ const zaloIcon =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/2048px-Icon_of_Zalo.svg.png";
 const ContactButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const contactOptions = [
     {
@@ -33,7 +51,7 @@ const ContactButtons = () => {
   ];
 
   return (
-    <div className="fixed bottom-24 right-6 z-40">
+    <div className="fixed bottom-24 right-6 z-40" ref={menuRef}>
       {/* Contact Options Menu */}
       {isOpen && (
         <Card className="absolute bottom-16 right-0 p-2 shadow-lg border animate-in slide-in-from-bottom-2 duration-200">

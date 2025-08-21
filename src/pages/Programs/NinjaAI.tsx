@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Zap,
   Target,
@@ -18,6 +19,8 @@ import {
   Rocket,
   Upload,
   ArrowRight,
+  XCircle,
+  Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
@@ -61,6 +64,8 @@ const NinjaAI = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [submitStep, setSubmitStep] = useState<'idle' | 'validating' | 'uploading' | 'submitting' | 'completed'>('idle');
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -79,20 +84,34 @@ const NinjaAI = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStep('validating');
+    setUploadProgress(0);
 
     try {
+      // Step 1: Validation
+      setSubmitStep('validating');
+      await new Promise(resolve => setTimeout(resolve, 200)); // Brief validation delay
+      
       let cvUrl = "";
 
-      // Upload CV file if selected
+      // Step 2: Upload CV file if selected
       if (formData.cvFile) {
+        setSubmitStep('uploading');
+        setUploadProgress(10);
+        
         const fileExt = formData.cvFile.name.split(".").pop();
         const fileName = `${Date.now()}-${Math.random()
           .toString(36)
           .substring(2)}.${fileExt}`;
 
+        setUploadProgress(30);
+        
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("cv_uploads")
-          .upload(fileName, formData.cvFile);
+          .upload(fileName, formData.cvFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
         if (uploadError) {
           console.error("Upload error:", uploadError);
@@ -101,32 +120,44 @@ const NinjaAI = () => {
             description: "Không thể tải lên file CV. Vui lòng thử lại.",
             variant: "destructive",
           });
+          setSubmitStep('idle');
           return;
         }
 
+        setUploadProgress(70);
+        
         // Get public URL
         const {
           data: { publicUrl },
         } = supabase.storage.from("cv_uploads").getPublicUrl(uploadData.path);
 
         cvUrl = publicUrl;
+        setUploadProgress(90);
       }
 
-      // Submit application
-      const { data, error } = await supabase.functions.invoke(
-        "submit-application",
-        {
-          body: {
-            fullName: formData.fullName,
-            email: formData.email,
-            phoneNumber: formData.phone,
-            cvUrl: cvUrl,
-          },
-        }
-      );
+      // Step 3: Submit application
+      setSubmitStep('submitting');
+      setUploadProgress(95);
+      
+      const { data, error } = await Promise.race([
+        supabase.functions.invoke(
+          "submit-application",
+          {
+            body: {
+              fullName: formData.fullName,
+              email: formData.email,
+              phoneNumber: formData.phone,
+              cvUrl: cvUrl,
+            },
+          }
+        ),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 15000)
+        )
+      ]) as any;
 
       // Handle response including duplicate checks returned as success:false
-      if (data && (data as any).success === false) {
+      if (data && ('success' in data) && data.success === false) {
         toast({
           title: 'Không thể gửi đơn',
           description: (data as any).error || 'Thông tin đã tồn tại. Vui lòng kiểm tra lại.',
@@ -145,26 +176,44 @@ const NinjaAI = () => {
         return;
       }
 
+      // Step 4: Success
+      setSubmitStep('completed');
+      setUploadProgress(100);
+      
       toast({
         title: "Đơn ứng tuyển đã được gửi!",
         description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+        variant: "success",
       });
-
-      // Reset form
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        cvFile: null,
-        motivation: "",
-      });
+      
+      // Reset form after a brief delay
+      setTimeout(() => {
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          cvFile: null,
+          motivation: "",
+        });
+        setSubmitStep('idle');
+        setUploadProgress(0);
+      }, 1500);
+      
     } catch (error) {
       console.error("Unexpected error:", error);
+      
+      const errorMessage = error instanceof Error && error.message === 'Request timeout' 
+        ? 'Yêu cầu quá thời gian chờ. Vui lòng thử lại.'
+        : 'Có lỗi không mong muốn xảy ra. Vui lòng thử lại.';
+      
       toast({
         title: "Lỗi hệ thống",
-        description: "Có lỗi không mong muốn xảy ra. Vui lòng thử lại.",
+        description: errorMessage,
         variant: "destructive",
       });
+      
+      setSubmitStep('idle');
+      setUploadProgress(0);
     } finally {
       setIsSubmitting(false);
     }
@@ -1389,6 +1438,22 @@ const NinjaAI = () => {
                 />
               </div>
 
+              {/* Progress Bar */}
+              {isSubmitting && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">
+                      {submitStep === 'validating' && 'Đang kiểm tra thông tin...'}
+                      {submitStep === 'uploading' && 'Đang tải lên CV...'}
+                      {submitStep === 'submitting' && 'Đang gửi đơn ứng tuyển...'}
+                      {submitStep === 'completed' && 'Hoàn thành!'}
+                    </span>
+                    <span className="text-muted-foreground">{uploadProgress}%</span>
+                  </div>
+                  <Progress value={uploadProgress} className="w-full" />
+                </div>
+              )}
+
               <div className="text-center">
                 <Button
                   type="submit"
@@ -1397,8 +1462,20 @@ const NinjaAI = () => {
                   aria-busy={isSubmitting}
                   className="bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green px-12 py-4 text-lg"
                 >
-                  {isSubmitting ? "Đang gửi..." : "Gửi CV & Đơn ứng tuyển"}
-                  <Send className="w-5 h-5 ml-2" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      {submitStep === 'validating' && 'Đang kiểm tra...'}
+                      {submitStep === 'uploading' && 'Đang tải lên...'}
+                      {submitStep === 'submitting' && 'Đang gửi...'}
+                      {submitStep === 'completed' && 'Đã gửi!'}
+                    </>
+                  ) : (
+                    <>
+                      Gửi CV & Đơn ứng tuyển
+                      <Send className="w-5 h-5 ml-2" />
+                    </>
+                  )}
                 </Button>
               </div>
             </form>
