@@ -25,8 +25,7 @@ import {
   Newspaper,
 } from "lucide-react";
 import heroPortrait from "@/assets/áo mu.jpg";
-import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
-
+import ninjaAIBanner from "@/assets/background.mp4";
 
 const Index = () => {
   const heroRef = useRef<HTMLElement>(null);
@@ -104,12 +103,16 @@ const Index = () => {
         className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden"
       >
         <div className="absolute inset-0 bg-black/20" />
-        <div
-          className="absolute inset-0 parallax-bg opacity-900"
-          style={{
-            backgroundImage: `url(${ninjaAIBanner})`,
-          }}
-        />
+        <div className="absolute inset-0 parallax-bg overflow-hidden">
+          <video
+            className="w-full h-full object-cover"
+            src={ninjaAIBanner}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        </div>
 
         <div className="relative z-10 container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left animate-fade-in-left">
@@ -781,8 +784,11 @@ const Index = () => {
                   Boot, từ thiết kế architecture đến deployment.
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                Microservices là một kiến trúc phát triển phần mềm trong đó một ứng dụng lớn được xây dựng như một tập hợp các dịch vụ nhỏ, độc lập, có khả năng triển khai (deploy) riêng biệt. Mỗi dịch vụ tập trung vào một chức năng nghiệp vụ cụ thể và giao 
-                tiếp với các dịch vụ khác.
+                  Microservices là một kiến trúc phát triển phần mềm trong đó
+                  một ứng dụng lớn được xây dựng như một tập hợp các dịch vụ
+                  nhỏ, độc lập, có khả năng triển khai (deploy) riêng biệt. Mỗi
+                  dịch vụ tập trung vào một chức năng nghiệp vụ cụ thể và giao
+                  tiếp với các dịch vụ khác.
                 </p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 font-bold">
                   <div className="flex items-center">
@@ -799,7 +805,7 @@ const Index = () => {
                   size="sm"
                   className="w-full group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300"
                 >
-                   <a
+                  <a
                     href="https://tuyendung.evotek.vn/what-is-spring-cloud-microservices-made-simple/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -813,7 +819,7 @@ const Index = () => {
 
             {/* UI/UX Design Article */}
             <Card className="group overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <div
+              <div
                 className="relative h-48 bg-cover bg-center overflow-hidden"
                 style={{
                   backgroundImage:
@@ -825,7 +831,7 @@ const Index = () => {
 
                 <div className="absolute top-4 left-4">
                   <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                   Desgin
+                    Desgin
                   </span>
                 </div>
               </div>
@@ -838,8 +844,11 @@ const Index = () => {
                   component library đến design tokens.
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                Thiết kế hệ thống (Design System) năm 2025 tập trung vào việc xây dựng giao diện người dùng (UI) nhất quán và có khả năng mở rộng, đáp ứng nhu cầu đa dạng của người dùng trên nhiều nền tảng. Các yếu tố chính 
-                bao gồm xây dựng các component UI tái sử dụng, thiết lập quy tắc thiết kế rõ ràng.
+                  Thiết kế hệ thống (Design System) năm 2025 tập trung vào việc
+                  xây dựng giao diện người dùng (UI) nhất quán và có khả năng mở
+                  rộng, đáp ứng nhu cầu đa dạng của người dùng trên nhiều nền
+                  tảng. Các yếu tố chính bao gồm xây dựng các component UI tái
+                  sử dụng, thiết lập quy tắc thiết kế rõ ràng.
                 </p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 font-bold">
                   <div className="flex items-center">
@@ -870,7 +879,7 @@ const Index = () => {
 
             {/* Tech Trends Article */}
             <Card className="group overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <div
+              <div
                 className="relative h-48 bg-cover bg-center overflow-hidden"
                 style={{
                   backgroundImage:
@@ -882,7 +891,7 @@ const Index = () => {
 
                 <div className="absolute top-4 left-4">
                   <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                   Techonoly
+                    Techonoly
                   </span>
                 </div>
               </div>
@@ -896,9 +905,10 @@ const Index = () => {
                   nghệ.
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                Chương trình Ninja AI được thiết kế để đào tạo thế hệ kỹ sư công nghệ mới - những người không chỉ thành thạo 
-                về lập trình mà còn hiểu sâu về lập trình và ứng dụng AI vào công việc, đời sống và có khả năng áp dụng vào
-                các dự án thực tế.
+                  Chương trình Ninja AI được thiết kế để đào tạo thế hệ kỹ sư
+                  công nghệ mới - những người không chỉ thành thạo về lập trình
+                  mà còn hiểu sâu về lập trình và ứng dụng AI vào công việc, đời
+                  sống và có khả năng áp dụng vào các dự án thực tế.
                 </p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 font-bold">
                   <div className="flex items-center">
@@ -929,7 +939,7 @@ const Index = () => {
 
             {/* Productivity Tips Article */}
             <Card className="group overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-            <div
+              <div
                 className="relative h-48 bg-cover bg-center overflow-hidden"
                 style={{
                   backgroundImage:
@@ -941,7 +951,7 @@ const Index = () => {
 
                 <div className="absolute top-4 left-4">
                   <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                   Tip & TricksTricks
+                    Tip & TricksTricks
                   </span>
                 </div>
               </div>
@@ -954,8 +964,11 @@ const Index = () => {
                   code, debug và tối ưu hóa quy trình phát triển.
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                Trí tuệ nhân tạo (AI) đang hiện diện ở khắp mọi nơi, từ những bản demo GPT-5 đầy ấn tượng cho đến các công cụ trợ lý doanh nghiệp hứa hẹn làm thay công việc của bạn. Tuy nhiên, nếu bạn là một lập trình viên thực thụ,
-                 điều bạn quan tâm hơn cả là những công cụ AI nào bạn.
+                  Trí tuệ nhân tạo (AI) đang hiện diện ở khắp mọi nơi, từ những
+                  bản demo GPT-5 đầy ấn tượng cho đến các công cụ trợ lý doanh
+                  nghiệp hứa hẹn làm thay công việc của bạn. Tuy nhiên, nếu bạn
+                  là một lập trình viên thực thụ, điều bạn quan tâm hơn cả là
+                  những công cụ AI nào bạn.
                 </p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-4 font-bold">
                   <div className="flex items-center">
@@ -992,12 +1005,12 @@ const Index = () => {
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               <a
-                    href="https://tuyendung.evotek.vn/10-cong-cu-ai-ma-nguon-mo-dot-pha-moi-lap-trinh-vien-nen-biet/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                     Xem tất cả bài viết
-                  </a>
+                href="https://tuyendung.evotek.vn/10-cong-cu-ai-ma-nguon-mo-dot-pha-moi-lap-trinh-vien-nen-biet/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Xem tất cả bài viết
+              </a>
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
@@ -1104,8 +1117,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-
     </div>
   );
 };

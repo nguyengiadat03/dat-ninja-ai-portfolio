@@ -23,7 +23,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import ninjaAIBanner from "@/assets/ninja-ai-banner.jpg";
+import ninjaBanner from "@/assets/background_ninjaai.mp4";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
@@ -44,14 +44,14 @@ const NinjaAI = () => {
   useEffect(() => {
     if (location.state?.scrollToForm) {
       setTimeout(() => {
-        const element = document.getElementById('application-form');
+        const element = document.getElementById("application-form");
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: "smooth" });
         }
       }, 500);
     } else {
       // Cuộn về đầu trang khi không có scrollToForm
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location.state]);
 
@@ -65,7 +65,9 @@ const NinjaAI = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [submitStep, setSubmitStep] = useState<'idle' | 'validating' | 'uploading' | 'submitting' | 'completed'>('idle');
+  const [submitStep, setSubmitStep] = useState<
+    "idle" | "validating" | "uploading" | "submitting" | "completed"
+  >("idle");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -84,33 +86,33 @@ const NinjaAI = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStep('validating');
+    setSubmitStep("validating");
     setUploadProgress(0);
 
     try {
       // Step 1: Validation
-      setSubmitStep('validating');
-      await new Promise(resolve => setTimeout(resolve, 200)); // Brief validation delay
-      
+      setSubmitStep("validating");
+      await new Promise((resolve) => setTimeout(resolve, 200)); // Brief validation delay
+
       let cvUrl = "";
 
       // Step 2: Upload CV file if selected
       if (formData.cvFile) {
-        setSubmitStep('uploading');
+        setSubmitStep("uploading");
         setUploadProgress(10);
-        
+
         const fileExt = formData.cvFile.name.split(".").pop();
         const fileName = `${Date.now()}-${Math.random()
           .toString(36)
           .substring(2)}.${fileExt}`;
 
         setUploadProgress(30);
-        
+
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("cv_uploads")
           .upload(fileName, formData.cvFile, {
-            cacheControl: '3600',
-            upsert: false
+            cacheControl: "3600",
+            upsert: false,
           });
 
         if (uploadError) {
@@ -120,12 +122,12 @@ const NinjaAI = () => {
             description: "Không thể tải lên file CV. Vui lòng thử lại.",
             variant: "destructive",
           });
-          setSubmitStep('idle');
+          setSubmitStep("idle");
           return;
         }
 
         setUploadProgress(70);
-        
+
         // Get public URL
         const {
           data: { publicUrl },
@@ -136,56 +138,55 @@ const NinjaAI = () => {
       }
 
       // Step 3: Submit application
-      setSubmitStep('submitting');
+      setSubmitStep("submitting");
       setUploadProgress(95);
-      
-      const { data, error } = await Promise.race([
-        supabase.functions.invoke(
-          "submit-application",
-          {
-            body: {
-              fullName: formData.fullName,
-              email: formData.email,
-              phoneNumber: formData.phone,
-              cvUrl: cvUrl,
-            },
-          }
+
+      const { data, error } = (await Promise.race([
+        supabase.functions.invoke("submit-application", {
+          body: {
+            fullName: formData.fullName,
+            email: formData.email,
+            phoneNumber: formData.phone,
+            cvUrl: cvUrl,
+          },
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Request timeout")), 15000)
         ),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 15000)
-        )
-      ]) as any;
+      ])) as any;
 
       // Handle response including duplicate checks returned as success:false
-      if (data && ('success' in data) && data.success === false) {
+      if (data && "success" in data && data.success === false) {
         toast({
-          title: 'Không thể gửi đơn',
-          description: (data as any).error || 'Thông tin đã tồn tại. Vui lòng kiểm tra lại.',
-          variant: 'destructive',
+          title: "Không thể gửi đơn",
+          description:
+            (data as any).error ||
+            "Thông tin đã tồn tại. Vui lòng kiểm tra lại.",
+          variant: "destructive",
         });
         return;
       }
 
       if (error) {
-        console.error('Submit error:', error);
+        console.error("Submit error:", error);
         toast({
-          title: 'Lỗi gửi đơn',
-          description: error.message || 'Có lỗi xảy ra khi gửi đơn ứng tuyển',
-          variant: 'destructive',
+          title: "Lỗi gửi đơn",
+          description: error.message || "Có lỗi xảy ra khi gửi đơn ứng tuyển",
+          variant: "destructive",
         });
         return;
       }
 
       // Step 4: Success
-      setSubmitStep('completed');
+      setSubmitStep("completed");
       setUploadProgress(100);
-      
+
       toast({
         title: "Đơn ứng tuyển đã được gửi!",
         description: "Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
         variant: "success",
       });
-      
+
       // Reset form after a brief delay
       setTimeout(() => {
         setFormData({
@@ -195,24 +196,24 @@ const NinjaAI = () => {
           cvFile: null,
           motivation: "",
         });
-        setSubmitStep('idle');
+        setSubmitStep("idle");
         setUploadProgress(0);
       }, 1500);
-      
     } catch (error) {
       console.error("Unexpected error:", error);
-      
-      const errorMessage = error instanceof Error && error.message === 'Request timeout' 
-        ? 'Yêu cầu quá thời gian chờ. Vui lòng thử lại.'
-        : 'Có lỗi không mong muốn xảy ra. Vui lòng thử lại.';
-      
+
+      const errorMessage =
+        error instanceof Error && error.message === "Request timeout"
+          ? "Yêu cầu quá thời gian chờ. Vui lòng thử lại."
+          : "Có lỗi không mong muốn xảy ra. Vui lòng thử lại.";
+
       toast({
         title: "Lỗi hệ thống",
         description: errorMessage,
         variant: "destructive",
       });
-      
-      setSubmitStep('idle');
+
+      setSubmitStep("idle");
       setUploadProgress(0);
     } finally {
       setIsSubmitting(false);
@@ -291,13 +292,15 @@ const NinjaAI = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={ninjaAIBanner}
-            alt="Ninja AI Program"
+        <div className="absolute inset-0 parallax-bg overflow-hidden">
+          <video
             className="w-full h-full object-cover"
+            src={ninjaBanner}
+            autoPlay
+            loop
+            muted
+            playsInline
           />
-          <div className="absolute inset-0 bg-black/60" />
         </div>
 
         <div className="relative z-10 container mx-auto px-4 text-center">
@@ -315,7 +318,7 @@ const NinjaAI = () => {
               <span className="text-gradient-primary">Ninja AI</span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white font-bold mb-8 max-w-3xl mx-auto leading-relaxed">
               Trở thành những ninja công nghệ AI của tương lai. Chương trình đào
               tạo chuyên sâu với mentor kinh nghiệm và dự án thực tế.
             </p>
@@ -381,7 +384,7 @@ const NinjaAI = () => {
 
       {/* Program Overview */}
       <section id="program-details" className="py-20 bg-background-secondary">
-      <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Tổng quan chương trình
@@ -436,7 +439,7 @@ const NinjaAI = () => {
             ))}
           </div>
         </div>
-        </section>
+      </section>
       <section id="program-details" className="py-20 bg-background-secondary">
         {/* Mục tiêu chương trình */}
         <div className="container mx-auto px-4 mb-20">
@@ -445,7 +448,10 @@ const NinjaAI = () => {
               Mục tiêu chương trình
             </h2>
             <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Chương trình Ninja AI được thiết kế để đào tạo thế hệ kỹ sư công nghệ mới - những người không chỉ thành thạo về lập trình mà còn hiểu sâu về lập trình và ứng dụng AI vào công việc, đời sống và có khả năng áp dụng vào các dự án thực tế.
+              Chương trình Ninja AI được thiết kế để đào tạo thế hệ kỹ sư công
+              nghệ mới - những người không chỉ thành thạo về lập trình mà còn
+              hiểu sâu về lập trình và ứng dụng AI vào công việc, đời sống và có
+              khả năng áp dụng vào các dự án thực tế.
             </p>
           </div>
 
@@ -456,18 +462,37 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                   <Code className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">Kỹ năng cốt lõi</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Kỹ năng cốt lõi
+                </h3>
               </div>
               <div className="space-y-4 ">
                 {[
-                  { icon: <Zap className="w-5 h-5" />, text: "Full-stack development" },
-                  { icon: <Brain className="w-5 h-5" />, text: "Building a strong Blockchain, AI community" },
-                  { icon: <Target className="w-5 h-5" />, text: "Problem-solving mindset - AI First" },
-                  { icon: <Users className="w-5 h-5" />, text: "Team collaboration" }
+                  {
+                    icon: <Zap className="w-5 h-5" />,
+                    text: "Full-stack development",
+                  },
+                  {
+                    icon: <Brain className="w-5 h-5" />,
+                    text: "Building a strong Blockchain, AI community",
+                  },
+                  {
+                    icon: <Target className="w-5 h-5" />,
+                    text: "Problem-solving mindset - AI First",
+                  },
+                  {
+                    icon: <Users className="w-5 h-5" />,
+                    text: "Team collaboration",
+                  },
                 ].map((skill, index) => (
-                  <div key={index} className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200">
+                  <div
+                    key={index}
+                    className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200"
+                  >
                     <div className="text-blue-600 ">{skill.icon}</div>
-                    <span className="text-gray-700 font-medium">{skill.text}</span>
+                    <span className="text-gray-700 font-medium">
+                      {skill.text}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -479,18 +504,37 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
                   <Award className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">Đầu ra mong đợi</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Đầu ra mong đợi
+                </h3>
               </div>
               <div className="space-y-4">
                 {[
-                  { icon: <CheckCircle className="w-5 h-5" />, text: "Fresher/Junior Developer ready" },
-                  { icon: <Rocket className="w-5 h-5" />, text: "Portfolio dự án thực tế + Chatbot AI" },
-                  { icon: <Users className="w-5 h-5" />, text: "Kết nối industry network" },
-                  { icon: <Sparkles className="w-5 h-5" />, text: "Mindset startup - Mindset AI First" }
+                  {
+                    icon: <CheckCircle className="w-5 h-5" />,
+                    text: "Fresher/Junior Developer ready",
+                  },
+                  {
+                    icon: <Rocket className="w-5 h-5" />,
+                    text: "Portfolio dự án thực tế + Chatbot AI",
+                  },
+                  {
+                    icon: <Users className="w-5 h-5" />,
+                    text: "Kết nối industry network",
+                  },
+                  {
+                    icon: <Sparkles className="w-5 h-5" />,
+                    text: "Mindset startup - Mindset AI First",
+                  },
                 ].map((outcome, index) => (
-                  <div key={index} className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200">
+                  <div
+                    key={index}
+                    className="hover:scale-105 hover:shadow-xl flex items-center gap-3 p-3 bg-white/70 rounded-lg hover:bg-white/90 transition-all duration-200"
+                  >
                     <div className="text-green-600">{outcome.icon}</div>
-                    <span className="text-gray-700 font-medium">{outcome.text}</span>
+                    <span className="text-gray-700 font-medium">
+                      {outcome.text}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -599,7 +643,8 @@ const NinjaAI = () => {
               Dự án thực tập sinh đang thực hiện
             </h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Các dự án thực tế mà thực tập sinh Ninja AI đang phát triển, từ AI Chatbot đến Blockchain DApp và IoT Smart Home
+              Các dự án thực tế mà thực tập sinh Ninja AI đang phát triển, từ AI
+              Chatbot đến Blockchain DApp và IoT Smart Home
             </p>
           </div>
 
@@ -610,27 +655,38 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
                   <Brain className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">AI Chatbot Platform</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  AI Chatbot Platform
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Nền tảng chatbot AI với khả năng xử lý ngôn ngữ tự nhiên và tích hợp vector database.
+                Nền tảng chatbot AI với khả năng xử lý ngôn ngữ tự nhiên và tích
+                hợp vector database.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">React + TypeScript Frontend</span>
+                  <span className="text-sm text-gray-600">
+                    React + TypeScript Frontend
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Node.js + OpenAI API Backend</span>
+                  <span className="text-sm text-gray-600">
+                    Node.js + OpenAI API Backend
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Vector Database Integration</span>
+                  <span className="text-sm text-gray-600">
+                    Vector Database Integration
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Real-time Chat Interface</span>
+                  <span className="text-sm text-gray-600">
+                    Real-time Chat Interface
+                  </span>
                 </div>
               </div>
             </Card>
@@ -641,27 +697,38 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">E-commerce CRM System</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  E-commerce CRM System
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Hệ thống CRM thương mại điện tử với AI analytics và email automation.
+                Hệ thống CRM thương mại điện tử với AI analytics và email
+                automation.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Next.js + Prisma Stack</span>
+                  <span className="text-sm text-gray-600">
+                    Next.js + Prisma Stack
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">PostgreSQL Database</span>
+                  <span className="text-sm text-gray-600">
+                    PostgreSQL Database
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">AI-powered Analytics</span>
+                  <span className="text-sm text-gray-600">
+                    AI-powered Analytics
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Email Automation</span>
+                  <span className="text-sm text-gray-600">
+                    Email Automation
+                  </span>
                 </div>
               </div>
             </Card>
@@ -672,27 +739,38 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-600 rounded-full flex items-center justify-center">
                   <Code className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">Blockchain DApp</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  Blockchain DApp
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Ứng dụng phi tập trung cho việc quản lý và xác thực chứng chỉ giáo dục trên blockchain.
+                Ứng dụng phi tập trung cho việc quản lý và xác thực chứng chỉ
+                giáo dục trên blockchain.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Solidity Smart Contracts</span>
+                  <span className="text-sm text-gray-600">
+                    Solidity Smart Contracts
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Web3.js Integration</span>
+                  <span className="text-sm text-gray-600">
+                    Web3.js Integration
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">MetaMask Wallet Connect</span>
+                  <span className="text-sm text-gray-600">
+                    MetaMask Wallet Connect
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">IPFS File Storage</span>
+                  <span className="text-sm text-gray-600">
+                    IPFS File Storage
+                  </span>
                 </div>
               </div>
             </Card>
@@ -703,27 +781,38 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">AI Learning Mobile App</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  AI Learning Mobile App
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Ứng dụng mobile học tập cá nhân hóa với AI tutor và gamification elements.
+                Ứng dụng mobile học tập cá nhân hóa với AI tutor và gamification
+                elements.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">React Native + Expo</span>
+                  <span className="text-sm text-gray-600">
+                    React Native + Expo
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Firebase Backend</span>
+                  <span className="text-sm text-gray-600">
+                    Firebase Backend
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">AI Recommendation Engine</span>
+                  <span className="text-sm text-gray-600">
+                    AI Recommendation Engine
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Offline Learning Support</span>
+                  <span className="text-sm text-gray-600">
+                    Offline Learning Support
+                  </span>
                 </div>
               </div>
             </Card>
@@ -734,27 +823,38 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">AI Data Analytics Platform</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  AI Data Analytics Platform
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Nền tảng phân tích dữ liệu với machine learning models và interactive dashboards.
+                Nền tảng phân tích dữ liệu với machine learning models và
+                interactive dashboards.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Python + FastAPI</span>
+                  <span className="text-sm text-gray-600">
+                    Python + FastAPI
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">TensorFlow/PyTorch ML</span>
+                  <span className="text-sm text-gray-600">
+                    TensorFlow/PyTorch ML
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">D3.js Data Visualization</span>
+                  <span className="text-sm text-gray-600">
+                    D3.js Data Visualization
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Real-time Data Processing</span>
+                  <span className="text-sm text-gray-600">
+                    Real-time Data Processing
+                  </span>
                 </div>
               </div>
             </Card>
@@ -765,15 +865,20 @@ const NinjaAI = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full flex items-center justify-center">
                   <Rocket className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800">IoT Smart Home System</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  IoT Smart Home System
+                </h3>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                Hệ thống nhà thông minh với AI automation và voice control integration.
+                Hệ thống nhà thông minh với AI automation và voice control
+                integration.
               </p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Arduino/Raspberry Pi</span>
+                  <span className="text-sm text-gray-600">
+                    Arduino/Raspberry Pi
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
@@ -781,11 +886,15 @@ const NinjaAI = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Voice Assistant Integration</span>
+                  <span className="text-sm text-gray-600">
+                    Voice Assistant Integration
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Mobile Control App</span>
+                  <span className="text-sm text-gray-600">
+                    Mobile Control App
+                  </span>
                 </div>
               </div>
             </Card>
@@ -795,11 +904,15 @@ const NinjaAI = () => {
             <Card className="p-8 bg-gradient-to-r from-indigo-50 to-purple-50 border-none shadow-lg max-w-4xl mx-auto">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Sparkles className="w-8 h-8 text-indigo-600" />
-                <h3 className="text-2xl font-bold text-gray-800">Tham gia ngay để trải nghiệm</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Tham gia ngay để trải nghiệm
+                </h3>
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Các dự án này không chỉ là bài tập mà là sản phẩm thực tế được sử dụng bởi người dùng thật. 
-                Thực tập sinh sẽ được làm việc trực tiếp với các công nghệ tiên tiến và học hỏi từ mentor kinh nghiệm.
+                Các dự án này không chỉ là bài tập mà là sản phẩm thực tế được
+                sử dụng bởi người dùng thật. Thực tập sinh sẽ được làm việc trực
+                tiếp với các công nghệ tiên tiến và học hỏi từ mentor kinh
+                nghiệm.
               </p>
               <Button
                 size="lg"
@@ -837,62 +950,70 @@ const NinjaAI = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-               {
-                 emoji: "🎯",
-                 title: "AI First Mindset",
-                 description: "Luôn ưu tiên tư duy AI trong mọi giải pháp. Không chỉ học công nghệ mà còn hiểu cách áp dụng AI để tối ưu hóa quy trình làm việc.",
-                 color: "from-blue-500 to-cyan-600",
-                 bgGradient: "from-blue-50 via-cyan-50 to-blue-100"
-               },
-               {
-                 emoji: "⚡",
-                 title: "Learn Fast, Build Faster",
-                 description: "Học nhanh, thực hành ngay. Mỗi kiến thức mới phải được áp dụng vào dự án thực tế trong vòng 24 giờ.",
-                 color: "from-yellow-500 to-orange-600",
-                 bgGradient: "from-yellow-50 via-orange-50 to-amber-100"
-               },
-               {
-                 emoji: "🤝",
-                 title: "Community Driven",
-                 description: "Xây dựng và phát triển cùng cộng đồng. Chia sẻ kiến thức, hỗ trợ lẫn nhau và cùng nhau tiến bộ.",
-                 color: "from-green-500 to-emerald-600",
-                 bgGradient: "from-green-50 via-emerald-50 to-teal-100"
-               },
-               {
-                 emoji: "🔥",
-                 title: "Passion Over Perfection",
-                 description: "Đam mê là động lực chính. Không ngại thất bại, luôn sẵn sàng thử nghiệm và học hỏi từ mỗi sai lầm.",
-                 color: "from-red-500 to-pink-600",
-                 bgGradient: "from-red-50 via-pink-50 to-rose-100"
-               },
-               {
-                 emoji: "🌟",
-                 title: "Innovation Mindset",
-                 description: "Luôn tìm kiếm cách làm mới, sáng tạo. Không chỉ làm theo mà còn tạo ra những giải pháp độc đáo.",
-                 color: "from-purple-500 to-indigo-600",
-                 bgGradient: "from-purple-50 via-violet-50 to-indigo-100"
-               },
-               {
-                 emoji: "🚀",
-                 title: "Ship It Mentality",
-                 description: "Hoàn thành và triển khai sản phẩm thực tế. Từ ý tưởng đến sản phẩm có thể sử dụng được.",
-                 color: "from-teal-500 to-blue-600",
-                 bgGradient: "from-teal-50 via-sky-50 to-blue-100"
-               }
-             ].map((principle, index) => (
+              {
+                emoji: "🎯",
+                title: "AI First Mindset",
+                description:
+                  "Luôn ưu tiên tư duy AI trong mọi giải pháp. Không chỉ học công nghệ mà còn hiểu cách áp dụng AI để tối ưu hóa quy trình làm việc.",
+                color: "from-blue-500 to-cyan-600",
+                bgGradient: "from-blue-50 via-cyan-50 to-blue-100",
+              },
+              {
+                emoji: "⚡",
+                title: "Learn Fast, Build Faster",
+                description:
+                  "Học nhanh, thực hành ngay. Mỗi kiến thức mới phải được áp dụng vào dự án thực tế trong vòng 24 giờ.",
+                color: "from-yellow-500 to-orange-600",
+                bgGradient: "from-yellow-50 via-orange-50 to-amber-100",
+              },
+              {
+                emoji: "🤝",
+                title: "Community Driven",
+                description:
+                  "Xây dựng và phát triển cùng cộng đồng. Chia sẻ kiến thức, hỗ trợ lẫn nhau và cùng nhau tiến bộ.",
+                color: "from-green-500 to-emerald-600",
+                bgGradient: "from-green-50 via-emerald-50 to-teal-100",
+              },
+              {
+                emoji: "🔥",
+                title: "Passion Over Perfection",
+                description:
+                  "Đam mê là động lực chính. Không ngại thất bại, luôn sẵn sàng thử nghiệm và học hỏi từ mỗi sai lầm.",
+                color: "from-red-500 to-pink-600",
+                bgGradient: "from-red-50 via-pink-50 to-rose-100",
+              },
+              {
+                emoji: "🌟",
+                title: "Innovation Mindset",
+                description:
+                  "Luôn tìm kiếm cách làm mới, sáng tạo. Không chỉ làm theo mà còn tạo ra những giải pháp độc đáo.",
+                color: "from-purple-500 to-indigo-600",
+                bgGradient: "from-purple-50 via-violet-50 to-indigo-100",
+              },
+              {
+                emoji: "🚀",
+                title: "Ship It Mentality",
+                description:
+                  "Hoàn thành và triển khai sản phẩm thực tế. Từ ý tưởng đến sản phẩm có thể sử dụng được.",
+                color: "from-teal-500 to-blue-600",
+                bgGradient: "from-teal-50 via-sky-50 to-blue-100",
+              },
+            ].map((principle, index) => (
               <Card
-                 key={index}
-                 className={`p-6 card-hover bg-gradient-to-br ${principle.bgGradient} backdrop-blur-sm border-none shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
-               >
+                key={index}
+                className={`p-6 card-hover bg-gradient-to-br ${principle.bgGradient} backdrop-blur-sm border-none shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+              >
                 <div className="text-center">
                   <div className="text-4xl mb-4">{principle.emoji}</div>
-                  <div className={`w-full h-1 bg-gradient-to-r ${principle.color} rounded-full mb-4`}></div>
+                  <div
+                    className={`w-full h-1 bg-gradient-to-r ${principle.color} rounded-full mb-4`}
+                  ></div>
                   <h3 className="text-xl font-bold text-gray-800 mb-3">
-                     {principle.title}
-                   </h3>
-                   <p className="text-gray-700 leading-relaxed text-sm">
-                     {principle.description}
-                   </p>
+                    {principle.title}
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed text-sm">
+                    {principle.description}
+                  </p>
                 </div>
               </Card>
             ))}
@@ -906,9 +1027,10 @@ const NinjaAI = () => {
                 <div className="text-3xl">🥷</div>
               </div>
               <blockquote className="text-lg italic text-gray-700 leading-relaxed">
-                "Một Ninja AI không chỉ viết code, mà còn tạo ra những giải pháp thông minh. 
-                Chúng ta không chỉ theo kịp công nghệ, mà còn dẫn đầu xu hướng. 
-                Mỗi dòng code đều mang sứ mệnh tạo ra tương lai tốt đẹp hơn."
+                "Một Ninja AI không chỉ viết code, mà còn tạo ra những giải pháp
+                thông minh. Chúng ta không chỉ theo kịp công nghệ, mà còn dẫn
+                đầu xu hướng. Mỗi dòng code đều mang sứ mệnh tạo ra tương lai
+                tốt đẹp hơn."
               </blockquote>
               <div className="mt-4 text-sm text-gray-600 font-medium">
                 - Ninja AI Community
@@ -926,7 +1048,8 @@ const NinjaAI = () => {
               Thực tập sinh nói gì về Ninja AI
             </h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Những chia sẻ chân thật từ các thực tập sinh đã trải nghiệm chương trình Ninja AI
+              Những chia sẻ chân thật từ các thực tập sinh đã trải nghiệm chương
+              trình Ninja AI
             </p>
           </div>
 
@@ -939,16 +1062,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Chu Tiến Sơn</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Chương trình thực tập tại Ninja AI đã giúp tôi phát triển kỹ năng AI/ML một cách bài bản."
+                "Chương trình thực tập tại Ninja AI đã giúp tôi phát triển kỹ
+                năng AI/ML một cách bài bản."
               </p>
             </Card>
 
@@ -960,12 +1088,16 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Đàm Hữu Phú</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
@@ -981,16 +1113,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Lê Huỳnh</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Tôi đã học được cách áp dụng AI vào giải quyết các bài toán thực tế."
+                "Tôi đã học được cách áp dụng AI vào giải quyết các bài toán
+                thực tế."
               </p>
             </Card>
 
@@ -1002,16 +1139,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Lê Thành Chỉnh</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Chương trình giúp tôi tự tin hơn trong việc phát triển các ứng dụng AI."
+                "Chương trình giúp tôi tự tin hơn trong việc phát triển các ứng
+                dụng AI."
               </p>
             </Card>
 
@@ -1022,17 +1164,24 @@ const NinjaAI = () => {
                   VC
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-800">Vi Nguyễn Ngọc Châu</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <h3 className="font-bold text-gray-800">
+                    Vi Nguyễn Ngọc Châu
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Kiến thức thực tế và cơ hội làm việc với các dự án thật sự ấn tượng."
+                "Kiến thức thực tế và cơ hội làm việc với các dự án thật sự ấn
+                tượng."
               </p>
             </Card>
 
@@ -1044,12 +1193,16 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Nguyễn Hoàng Kiên</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
@@ -1065,12 +1218,16 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Trần Hữu Ánh Băng</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
@@ -1086,12 +1243,16 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Vũ Phương Nam</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
@@ -1107,16 +1268,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Trịnh Nam Sơn</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Học được rất nhiều về Machine Learning và Deep Learning thực tế."
+                "Học được rất nhiều về Machine Learning và Deep Learning thực
+                tế."
               </p>
             </Card>
 
@@ -1128,16 +1294,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Lê Gia Đạt</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Portfolio sau khóa học giúp tôi dễ dàng tìm được việc làm mơ ước."
+                "Portfolio sau khóa học giúp tôi dễ dàng tìm được việc làm mơ
+                ước."
               </p>
             </Card>
 
@@ -1149,16 +1320,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Nguyễn Tiến Long</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Chương trình thực tập đã thay đổi hoàn toàn career path của tôi."
+                "Chương trình thực tập đã thay đổi hoàn toàn career path của
+                tôi."
               </p>
             </Card>
 
@@ -1170,16 +1346,21 @@ const NinjaAI = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Phạm Minh Tuấn</h3>
-                  <p className="text-sm text-gray-600">Thực tập sinh Ninja AI</p>
+                  <p className="text-sm text-gray-600">
+                    Thực tập sinh Ninja AI
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">⭐</span>
+                  <span key={i} className="text-yellow-400 text-lg">
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p className="text-gray-700 italic leading-relaxed">
-                "Kiến thức AI được ứng dụng ngay vào công việc, rất thực tế và hiệu quả."
+                "Kiến thức AI được ứng dụng ngay vào công việc, rất thực tế và
+                hiệu quả."
               </p>
             </Card>
           </div>
@@ -1188,11 +1369,14 @@ const NinjaAI = () => {
             <Card className="p-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-none shadow-lg max-w-4xl mx-auto">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Users className="w-8 h-8 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-800">Bạn cũng muốn trở thành Ninja AI?</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Bạn cũng muốn trở thành Ninja AI?
+                </h3>
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Hãy tham gia cùng chúng tôi để trải nghiệm chương trình đào tạo AI chuyên nghiệp và 
-                kết nối với cộng đồng những người đam mê công nghệ.
+                Hãy tham gia cùng chúng tôi để trải nghiệm chương trình đào tạo
+                AI chuyên nghiệp và kết nối với cộng đồng những người đam mê
+                công nghệ.
               </p>
               <Button
                 size="lg"
@@ -1219,7 +1403,8 @@ const NinjaAI = () => {
               Đối tượng tham gia
             </h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Chương trình Ninja AI dành cho những ai có đam mê và quyết tâm phát triển trong lĩnh vực AI
+              Chương trình Ninja AI dành cho những ai có đam mê và quyết tâm
+              phát triển trong lĩnh vực AI
             </p>
           </div>
 
@@ -1230,42 +1415,54 @@ const NinjaAI = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
                   <span className="text-3xl">✅</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">Phù hợp với</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Phù hợp với
+                </h3>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Sinh viên năm cuối hoặc fresh graduate IT</span>
+                    <span className="font-semibold">
+                      Sinh viên năm cuối hoặc fresh graduate IT
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Người đã có kiến thức cơ bản về lập trình</span>
+                    <span className="font-semibold">
+                      Người đã có kiến thức cơ bản về lập trình
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Có đam mê học hỏi và phát triển bản thân</span>
+                    <span className="font-semibold">
+                      Có đam mê học hỏi và phát triển bản thân
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Sẵn sàng commit full-time trong 3 tháng</span>
+                    <span className="font-semibold">
+                      Sẵn sàng commit full-time trong 3 tháng
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Muốn làm việc trong môi trường startup</span>
+                    <span className="font-semibold">
+                      Muốn làm việc trong môi trường startup
+                    </span>
                   </p>
                 </div>
               </div>
@@ -1277,38 +1474,48 @@ const NinjaAI = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                   <span className="text-3xl">📋</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">Yêu cầu kỹ năng</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Yêu cầu kỹ năng
+                </h3>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Hiểu biết cơ bản về HTML, CSS, JavaScript</span>
+                    <span className="font-semibold">
+                      Hiểu biết cơ bản về HTML, CSS, JavaScript
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Đã từng làm ít nhất 1 dự án cá nhân</span>
+                    <span className="font-semibold">
+                      Đã từng làm ít nhất 1 dự án cá nhân
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Kỹ năng tiếng Anh đọc hiểu tài liệu</span>
+                    <span className="font-semibold">
+                      Kỹ năng tiếng Anh đọc hiểu tài liệu
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="font-semibold">Thái độ học hỏi và tinh thần teamwork</span>
+                    <span className="font-semibold">
+                      Thái độ học hỏi và tinh thần teamwork
+                    </span>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p className="text-gray-700 leading-relaxed">
@@ -1324,10 +1531,13 @@ const NinjaAI = () => {
             <Card className="p-8 bg-gradient-to-r from-purple-50 to-indigo-50 border-none shadow-lg max-w-4xl mx-auto">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Target className="w-8 h-8 text-purple-600" />
-                <h3 className="text-2xl font-bold text-gray-800">Bạn đã sẵn sàng chưa?</h3>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  Bạn đã sẵn sàng chưa?
+                </h3>
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Nếu bạn thấy mình phù hợp với các tiêu chí trên, đừng ngần ngại ứng tuyển ngay hôm nay!
+                Nếu bạn thấy mình phù hợp với các tiêu chí trên, đừng ngần ngại
+                ứng tuyển ngay hôm nay!
               </p>
               <Button
                 size="lg"
@@ -1360,7 +1570,11 @@ const NinjaAI = () => {
           </div>
 
           <Card className="p-8 bg-gray-100 border-none shadow-lg">
-            <form id="registration-form" onSubmit={handleSubmit} className="space-y-6">
+            <form
+              id="registration-form"
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
@@ -1443,12 +1657,16 @@ const NinjaAI = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">
-                      {submitStep === 'validating' && 'Đang kiểm tra thông tin...'}
-                      {submitStep === 'uploading' && 'Đang tải lên CV...'}
-                      {submitStep === 'submitting' && 'Đang gửi đơn ứng tuyển...'}
-                      {submitStep === 'completed' && 'Hoàn thành!'}
+                      {submitStep === "validating" &&
+                        "Đang kiểm tra thông tin..."}
+                      {submitStep === "uploading" && "Đang tải lên CV..."}
+                      {submitStep === "submitting" &&
+                        "Đang gửi đơn ứng tuyển..."}
+                      {submitStep === "completed" && "Hoàn thành!"}
                     </span>
-                    <span className="text-muted-foreground">{uploadProgress}%</span>
+                    <span className="text-muted-foreground">
+                      {uploadProgress}%
+                    </span>
                   </div>
                   <Progress value={uploadProgress} className="w-full" />
                 </div>
@@ -1465,10 +1683,10 @@ const NinjaAI = () => {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      {submitStep === 'validating' && 'Đang kiểm tra...'}
-                      {submitStep === 'uploading' && 'Đang tải lên...'}
-                      {submitStep === 'submitting' && 'Đang gửi...'}
-                      {submitStep === 'completed' && 'Đã gửi!'}
+                      {submitStep === "validating" && "Đang kiểm tra..."}
+                      {submitStep === "uploading" && "Đang tải lên..."}
+                      {submitStep === "submitting" && "Đang gửi..."}
+                      {submitStep === "completed" && "Đã gửi!"}
                     </>
                   ) : (
                     <>
