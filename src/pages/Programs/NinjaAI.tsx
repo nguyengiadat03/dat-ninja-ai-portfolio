@@ -69,6 +69,44 @@ const NinjaAI = () => {
     "idle" | "validating" | "uploading" | "submitting" | "completed"
   >("idle");
 
+  // ====== Tối ưu video: lazy-load và tôn trọng Data Saver / mạng chậm ======
+  const heroRef = useRef<HTMLElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+
+  useEffect(() => {
+    if (!heroRef.current) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let allow = true;
+          const conn = (navigator as any)?.connection;
+          // Bỏ tải video nếu người dùng bật tiết kiệm dữ liệu hoặc mạng rất chậm
+          if (conn?.saveData) allow = false;
+          if (/(^|-)2g/.test(conn?.effectiveType || "")) allow = false;
+
+          if (allow) setShouldLoadVideo(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px" } // nạp sớm trước khi hero vào khung nhìn
+    );
+
+    io.observe(heroRef.current);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadVideo || !heroVideoRef.current) return;
+    const v = heroVideoRef.current;
+    // load metadata trước rồi play để mượt hơn
+    v.load();
+    const p = v.play();
+    if (p && typeof p.then === "function") p.catch(() => {});
+  }, [shouldLoadVideo]);
+  // =======================================================================
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -291,16 +329,29 @@ const NinjaAI = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
         <div className="absolute inset-0 parallax-bg overflow-hidden">
           <video
+            ref={heroVideoRef}
             className="w-full h-full object-cover"
-            src={ninjaBanner}
             autoPlay
             loop
             muted
             playsInline
-          />
+            preload="metadata"
+            aria-hidden="true"
+          >
+            {shouldLoadVideo && (
+              <>
+                {/* Nếu có file .webm nhẹ hơn, bạn có thể import và thêm source webm ưu tiên:
+                    <source src={ninjaBannerWebm} type="video/webm" /> */}
+                <source src={ninjaBanner} type="video/mp4" />
+              </>
+            )}
+          </video>
         </div>
 
         <div className="relative z-10 container mx-auto px-4 text-center">
@@ -440,6 +491,7 @@ const NinjaAI = () => {
           </div>
         </div>
       </section>
+
       <section id="program-details" className="py-20 bg-background-secondary">
         {/* Mục tiêu chương trình */}
         <div className="container mx-auto px-4 mb-20">

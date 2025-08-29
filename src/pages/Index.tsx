@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,6 +32,9 @@ const Index = () => {
   const strengthsRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+
   // Cuộn về đầu trang khi component load
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -55,6 +58,39 @@ const Index = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let allow = true;
+          const conn = (navigator as any)?.connection;
+          if (conn?.saveData) allow = false;
+
+          if (/(^|-)2g/.test(conn?.effectiveType || "")) allow = false;
+
+          if (allow) setShouldLoadVideo(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // --- thêm: đảm bảo play mượt khi đã nạp ---
+  useEffect(() => {
+    if (!shouldLoadVideo || !videoRef.current) return;
+    const v = videoRef.current;
+    // load() để áp preload="metadata" → request nhẹ trước khi play
+    v.load();
+    const p = v.play();
+    if (p && typeof p.then === "function") p.catch(() => {});
+  }, [shouldLoadVideo]);
 
   const strengths = [
     {
@@ -104,14 +140,26 @@ const Index = () => {
       >
         <div className="absolute inset-0 bg-black/20" />
         <div className="absolute inset-0 parallax-bg overflow-hidden">
+          {/* Sửa: lazy load + preload metadata + chỉ gắn source khi cần */}
           <video
+            ref={videoRef}
             className="w-full h-full object-cover"
-            src={ninjaAIBanner}
             autoPlay
             loop
             muted
             playsInline
-          />
+            preload="metadata"
+            // poster={heroPoster} // nếu có ảnh poster, bật dòng này
+            aria-hidden="true"
+          >
+            {shouldLoadVideo && (
+              <>
+                {/* Ưu tiên webm nếu có */}
+                {/* <source src={ninjaAIWebm} type="video/webm" /> */}
+                <source src={ninjaAIBanner} type="video/mp4" />
+              </>
+            )}
+          </video>
         </div>
 
         <div className="relative z-10 container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
