@@ -24,7 +24,7 @@ import {
   ExternalLink,
   Newspaper,
 } from "lucide-react";
-import heroPortrait from "@/assets/áo mu.jpg";
+import heroPortrait from "@/assets/NguyenGiaDat.jpg";
 import ninjaAIBanner from "@/assets/background.mp4";
 
 const Index = () => {
@@ -49,7 +49,7 @@ const Index = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     [heroRef, strengthsRef, contactRef].forEach((ref) => {
@@ -76,7 +76,7 @@ const Index = () => {
           io.disconnect();
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "200px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -171,7 +171,7 @@ const Index = () => {
 
               <br></br>
               <span className="block text-center text-base md:text-2xl lg:text-3xl font-semibold text-primary">
-                From Ninja Ai
+                FrontEnd Developer
               </span>
               <br></br>
               <span className="block text-center text-base md:text-lg lg:text-xl font-medium text-white">

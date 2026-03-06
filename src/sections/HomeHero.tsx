@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Zap, ArrowRight, Star, Users, Award } from "lucide-react";
-import heroPortrait from "@/assets/áo mu.jpg";
+import heroPortrait from "@/assets/NguyenGiaDat.jpg";
 import ninjaAIBanner from "@/assets/background.mp4";
 
 const HomeHero = () => {
@@ -68,7 +68,7 @@ const HomeHero = () => {
             </span>
             <br />
             <span className="block text-center text-base md:text-2xl lg:text-3xl font-semibold text-primary">
-              From Ninja AI
+              FrontEnd Developer
             </span>
             <br />
             <span className="block text-center text-base md:text-lg lg:text-xl font-medium text-white">
