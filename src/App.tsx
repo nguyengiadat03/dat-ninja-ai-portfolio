@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/layout/Layout";
 import Index from "./pages/Index";
 import AboutSkills from "./pages/About/Skills";
@@ -16,32 +18,50 @@ import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/gioi-thieu/ky-nang" element={<AboutSkills />} />
-            <Route path="/gioi-thieu/hoc-van" element={<AboutEducation />} />
-            <Route path="/gioi-thieu/du-an" element={<AboutProjects />} />
-            <Route path="/chuong-trinh/ninja-ai" element={<NinjaAI />} />
-            <Route path="/su-kien" element={<Events />} />
-            <Route path="/tin-tuc" element={<News />} />
-            <Route path="/lien-he" element={<Contact />} />
-            <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicy />} />
-            <Route path="/dieu-khoan-su-dung" element={<TermsOfService />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/gioi-thieu/ky-nang" element={<AboutSkills />} />
+                <Route
+                  path="/gioi-thieu/hoc-van"
+                  element={<AboutEducation />}
+                />
+                <Route path="/gioi-thieu/du-an" element={<AboutProjects />} />
+                <Route path="/chuong-trinh/ninja-ai" element={<NinjaAI />} />
+                <Route path="/su-kien" element={<Events />} />
+                <Route path="/tin-tuc" element={<News />} />
+                <Route path="/lien-he" element={<Contact />} />
+                <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicy />} />
+                <Route
+                  path="/dieu-khoan-su-dung"
+                  element={<TermsOfService />}
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  </ErrorBoundary>
 );
 
 export default App;

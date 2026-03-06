@@ -1,30 +1,45 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import SEO from "@/components/SEO";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, MessageCircle, Calendar, Github, Linkedin, Facebook, Zap, Clock, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  MessageCircle,
+  Calendar,
+  Github,
+  Linkedin,
+  Facebook,
+  Zap,
+  Clock,
+  CheckCircle,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const { toast } = useToast();
 
-  // Cuộn về đầu trang khi component load
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -38,312 +53,374 @@ const Contact = () => {
       name: "",
       email: "",
       subject: "",
-      message: ""
+      message: "",
     });
   };
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Liên hệ với tôi
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Tôi luôn sẵn sàng lắng nghe và trao đổi về các dự án, cơ hội hợp tác 
-            hoặc đơn giản là chia sẻ về công nghệ. Hãy liên hệ với tôi!
-          </p>
-        </div>
+    <>
+      <SEO
+        title="Liên hệ"
+        description="Liên hệ với Nguyễn Gia Đạt để trao đổi về dự án, cơ hội hợp tác hoặc tư vấn về công nghệ và lập trình."
+        keywords="liên hệ, contact, frontend developer, tư vấn công nghệ"
+      />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Contact Info */}
-          <div className="space-y-8">
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center text-white">
-                  <Mail className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Email</h3>
-                  <p className="text-muted-foreground">dat.nguyen@example.com</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Phương thức liên hệ chính. Tôi thường phản hồi trong vòng 24 giờ.
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-accent rounded-lg flex items-center justify-center text-white">
-                  <Phone className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Điện thoại</h3>
-                  <p className="text-muted-foreground">+84 123 456 789</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Có thể liên hệ qua Zalo hoặc WhatsApp cho các vấn đề khẩn cấp.
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-secondary rounded-lg flex items-center justify-center text-secondary-dark">
-                  <MapPin className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Địa chỉ</h3>
-                  <p className="text-muted-foreground">Hà Nội, Việt Nam</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Có thể hẹn gặp trực tiếp tại các quán cafe hoặc coworking space.
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-hero border-none">
-              <div className="text-center">
-                <Calendar className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="font-semibold text-foreground mb-2">Đặt lịch hẹn</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Muốn trao đổi trực tiếp? Hãy đặt lịch meeting với tôi.
-                </p>
-                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
-                  Chọn thời gian phù hợp
-                </Button>
-              </div>
-            </Card>
-
-            {/* Quick Contact */}
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <div className="text-center mb-4">
-                <Zap className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <h3 className="font-semibold text-foreground">Liên hệ nhanh</h3>
-                <p className="text-sm text-muted-foreground">Kết nối qua mạng xã hội</p>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-3">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-300"
-                >
-                  <Facebook className="w-5 h-5 text-blue-600" />
-                  <span className="text-xs">Facebook</span>
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-500"
-                >
-                  <Linkedin className="w-5 h-5 text-blue-700" />
-                  <span className="text-xs">LinkedIn</span>
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-gray-50 hover:border-gray-400"
-                >
-                  <Github className="w-5 h-5 text-gray-700" />
-                  <span className="text-xs">GitHub</span>
-                </Button>
-              </div>
-              
-              <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex items-center gap-2 text-green-700">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Online ngay bây giờ</span>
-                </div>
-                <p className="text-xs text-green-600 mt-1">Phản hồi trong vòng 30 phút</p>
-              </div>
-            </Card>
-          </div>
-
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card className="p-8 bg-gradient-card border-none shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <MessageCircle className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl font-bold text-foreground">Gửi tin nhắn</h2>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Họ và tên *
-                    </label>
-                    <Input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Nguyễn Văn A"
-                      required
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Email *
-                    </label>
-                    <Input
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="your.email@example.com"
-                      required
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Tiêu đề *
-                  </label>
-                  <Input
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    placeholder="Chủ đề bạn muốn trao đổi"
-                    required
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Nội dung tin nhắn *
-                  </label>
-                  <Textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Chia sẻ chi tiết về những gì bạn muốn trao đổi..."
-                    rows={6}
-                    required
-                    className="w-full resize-none"
-                  />
-                </div>
-
-                <Button 
-                  type="submit"
-                  size="lg"
-                  className="w-full md:w-auto bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green"
-                >
-                  Gửi tin nhắn
-                  <Send className="w-5 h-5 ml-2" />
-                </Button>
-              </form>
-
-              <div className="mt-8 p-4 bg-secondary/10 rounded-lg">
-                <h3 className="font-semibold text-foreground mb-2">Thời gian phản hồi</h3>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                  <li>• Email thông thường: 24-48 giờ</li>
-                  <li>• Dự án khẩn cấp: Trong vòng 12 giờ</li>
-                  <li>• Cuối tuần: Phản hồi vào thứ 2</li>
-                </ul>
-              </div>
-            </Card>
-
-            {/* FAQ Section */}
-            <Card className="mt-8 p-8 bg-gradient-card border-none">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Bạn có nhận làm dự án freelance không?
-                  </h4>
-                  <p className="text-muted-foreground text-sm">
-                    Có, tôi nhận các dự án phù hợp với lịch trình. Hãy chia sẻ chi tiết dự án để tôi có thể tư vấn tốt nhất.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Làm thế nào để tham gia chương trình Ninja AI?
-                  </h4>
-                  <p className="text-muted-foreground text-sm">
-                    Bạn có thể đăng ký tại trang Ninja AI hoặc liên hệ trực tiếp với tôi để được tư vấn chi tiết.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Bạn có nhận mentor cá nhân không?
-                  </h4>
-                  <p className="text-muted-foreground text-sm">
-                    Tùy vào thời gian và mức độ phù hợp. Hãy liên hệ để thảo luận về nhu cầu học tập của bạn.
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-
-        {/* FAQ Section */}
-        <div className="mt-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Câu hỏi thường gặp</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Những câu hỏi phổ biến mà khách hàng thường quan tâm
+      <div className="min-h-screen py-20">
+        <div className="container mx-auto px-4">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Liên hệ với tôi
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Tôi luôn sẵn sàng lắng nghe và trao đổi về các dự án, cơ hội hợp
+              tác hoặc đơn giản là chia sẻ về công nghệ. Hãy liên hệ với tôi!
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-primary" />
-                Thời gian phản hồi như thế nào?
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Tôi thường phản hồi email trong vòng 24 giờ làm việc. Đối với các dự án khẩn cấp, 
-                bạn có thể liên hệ qua số điện thoại để được hỗ trợ nhanh hơn.
-              </p>
-            </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center text-white">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Email</h3>
+                    <p className="text-muted-foreground">
+                      nguyengiadat2k03@gmail.com
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Phương thức liên hệ chính. Tôi thường phản hồi trong vòng 24
+                  giờ.
+                </p>
+              </Card>
 
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
-                Có làm việc ngoài giờ không?
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Tôi làm việc từ 8:00 - 18:00 các ngày trong tuần. Tuy nhiên, với các dự án quan trọng, 
-                tôi sẵn sàng hỗ trợ ngoài giờ khi cần thiết.
-              </p>
-            </Card>
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-accent rounded-lg flex items-center justify-center text-white">
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">
+                      Điện thoại
+                    </h3>
+                    <p className="text-muted-foreground">0368764803</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Có thể liên hệ qua Zalo hoặc WhatsApp cho các vấn đề khẩn cấp.
+                </p>
+              </Card>
 
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                <Send className="w-5 h-5 text-primary" />
-                Quy trình làm việc ra sao?
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Tôi bắt đầu bằng việc tìm hiểu yêu cầu, sau đó lập kế hoạch chi tiết, 
-                thực hiện và báo cáo tiến độ định kỳ cho khách hàng.
-              </p>
-            </Card>
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gradient-secondary rounded-lg flex items-center justify-center text-secondary-dark">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Địa chỉ</h3>
+                    <p className="text-muted-foreground">
+                      Hai Bà Trưng, Hà Nội
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Có thể hẹn gặp trực tiếp tại các quán cafe hoặc coworking
+                  space.
+                </p>
+              </Card>
 
-            <Card className="p-6 bg-gradient-card border-none card-hover">
-              <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary" />
-                Có hỗ trợ sau dự án không?
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Có, tôi cung cấp hỗ trợ kỹ thuật miễn phí trong 30 ngày đầu sau khi bàn giao dự án. 
-                Sau đó sẽ có gói bảo trì theo thoả thuận.
+              <Card className="p-6 bg-gradient-hero border-none">
+                <div className="text-center">
+                  <Calendar className="w-12 h-12 text-primary mx-auto mb-4" />
+                  <h3 className="font-semibold text-foreground mb-2">
+                    Đặt lịch hẹn
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Muốn trao đổi trực tiếp? Hãy đặt lịch meeting với tôi.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="border-primary text-primary hover:bg-primary hover:text-white"
+                  >
+                    Chọn thời gian phù hợp
+                  </Button>
+                </div>
+              </Card>
+
+              {/* Quick Contact */}
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <div className="text-center mb-4">
+                  <Zap className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                  <h3 className="font-semibold text-foreground">
+                    Liên hệ nhanh
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Kết nối qua mạng xã hội
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-300"
+                    asChild
+                  >
+                    <a
+                      href="https://www.facebook.com/nguyen.gia.at.773139"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Facebook className="w-5 h-5 text-blue-600" />
+                      <span className="text-xs">Facebook</span>
+                    </a>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-blue-50 hover:border-blue-500"
+                    asChild
+                  >
+                    <a
+                      href="https://linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin className="w-5 h-5 text-blue-700" />
+                      <span className="text-xs">LinkedIn</span>
+                    </a>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex flex-col items-center gap-2 h-auto py-3 hover:bg-gray-50 hover:border-gray-400"
+                    asChild
+                  >
+                    <a
+                      href="https://github.com/nguyengiadat03"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="w-5 h-5 text-gray-700" />
+                      <span className="text-xs">GitHub</span>
+                    </a>
+                  </Button>
+                </div>
+
+                <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 text-green-700">
+                    <CheckCircle className="w-4 h-4" />
+                    <span className="text-sm font-medium">
+                      Online ngay bây giờ
+                    </span>
+                  </div>
+                  <p className="text-xs text-green-600 mt-1">
+                    Phản hồi trong vòng 30 phút
+                  </p>
+                </div>
+              </Card>
+            </div>
+
+            {/* Contact Form */}
+            <div className="lg:col-span-2">
+              <Card className="p-8 bg-gradient-card border-none shadow-lg">
+                <div className="flex items-center gap-3 mb-6">
+                  <MessageCircle className="w-6 h-6 text-primary" />
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Gửi tin nhắn
+                  </h2>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Họ và tên *
+                      </label>
+                      <Input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Nguyễn Văn A"
+                        required
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Email *
+                      </label>
+                      <Input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="your.email@example.com"
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Tiêu đề *
+                    </label>
+                    <Input
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      placeholder="Chủ đề bạn muốn trao đổi"
+                      required
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Nội dung tin nhắn *
+                    </label>
+                    <Textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Chia sẻ chi tiết về những gì bạn muốn trao đổi..."
+                      rows={6}
+                      required
+                      className="w-full resize-none"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full md:w-auto bg-gradient-primary text-white hover:bg-primary-dark btn-scale btn-ripple shadow-green"
+                  >
+                    Gửi tin nhắn
+                    <Send className="w-5 h-5 ml-2" />
+                  </Button>
+                </form>
+
+                <div className="mt-8 p-4 bg-secondary/10 rounded-lg">
+                  <h3 className="font-semibold text-foreground mb-2">
+                    Thời gian phản hồi
+                  </h3>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Email thông thường: 24-48 giờ</li>
+                    <li>• Dự án khẩn cấp: Trong vòng 12 giờ</li>
+                    <li>• Cuối tuần: Phản hồi vào thứ 2</li>
+                  </ul>
+                </div>
+              </Card>
+
+              {/* FAQ Section */}
+              <Card className="mt-8 p-8 bg-gradient-card border-none">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">
+                      Bạn có nhận làm dự án freelance không?
+                    </h4>
+                    <p className="text-muted-foreground text-sm">
+                      Có, tôi nhận các dự án phù hợp với lịch trình. Hãy chia sẻ
+                      chi tiết dự án để tôi có thể tư vấn tốt nhất.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">
+                      Làm thế nào để tham gia chương trình Ninja AI?
+                    </h4>
+                    <p className="text-muted-foreground text-sm">
+                      Bạn có thể đăng ký tại trang Ninja AI hoặc liên hệ trực
+                      tiếp với tôi để được tư vấn chi tiết.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">
+                      Bạn có nhận mentor cá nhân không?
+                    </h4>
+                    <p className="text-muted-foreground text-sm">
+                      Tùy vào thời gian và mức độ phù hợp. Hãy liên hệ để thảo
+                      luận về nhu cầu học tập của bạn.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                Câu hỏi thường gặp
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Những câu hỏi phổ biến mà khách hàng thường quan tâm
               </p>
-            </Card>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-primary" />
+                  Thời gian phản hồi như thế nào?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Tôi thường phản hồi email trong vòng 24 giờ làm việc. Đối với
+                  các dự án khẩn cấp, bạn có thể liên hệ qua số điện thoại để
+                  được hỗ trợ nhanh hơn.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-primary" />
+                  Có làm việc ngoài giờ không?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Tôi làm việc từ 8:00 - 18:00 các ngày trong tuần. Tuy nhiên,
+                  với các dự án quan trọng, tôi sẵn sàng hỗ trợ ngoài giờ khi
+                  cần thiết.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Send className="w-5 h-5 text-primary" />
+                  Quy trình làm việc ra sao?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Tôi bắt đầu bằng việc tìm hiểu yêu cầu, sau đó lập kế hoạch
+                  chi tiết, thực hiện và báo cáo tiến độ định kỳ cho khách hàng.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-gradient-card border-none card-hover">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary" />
+                  Có hỗ trợ sau dự án không?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Có, tôi cung cấp hỗ trợ kỹ thuật miễn phí trong 30 ngày đầu
+                  sau khi bàn giao dự án. Sau đó sẽ có gói bảo trì theo thoả
+                  thuận.
+                </p>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
